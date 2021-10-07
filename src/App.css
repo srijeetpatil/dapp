@@ -1,5 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@700&display=swap");
+
 .App {
-  text-align: center;
+  width: 72em;
+  margin: auto;
+  font-family: "Quicksand", sans-serif;
+  margin-top: 2rem;
+  margin-bottom: 2rem;  
+}
+
+.font {
+  font-family: "Quicksand", sans-serif;
+}
+
+.headingFont {
+  font-family: "IBM Plex Sans Hebrew", sans-serif;
 }
 
 .App-logo {
