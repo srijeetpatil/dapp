@@ -1,9 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400&display=swap");
+
 .App {
   width: 72em;
   margin: auto;
   font-family: "Quicksand", sans-serif;
   margin-top: 2rem;
-  margin-bottom: 2rem;  
+  margin-bottom: 2rem;
+  font-family: "Sora", sans-serif;
+}
+
+.font {
+  font-family: "Sora", sans-serif;
 }
 
 .App-logo {

@@ -11,9 +11,9 @@ const styles = {
 export default function Header() {
   return (
     <div style={styles.container}>
-      <div style={{ margin: "0 2rem", padding: "1.5rem 0", fontWeight: "600" }}>
-        Chuck Norris
-      </div>
+      <div
+        style={{ margin: "0 2rem", padding: "1.5rem 0", fontWeight: "600" }}
+      ></div>
     </div>
   );
 }
