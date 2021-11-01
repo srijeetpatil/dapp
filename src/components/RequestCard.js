@@ -91,8 +91,8 @@ export default function RequestCard(props) {
           <button style={styles.readMore} className="font">
             Read more
           </button>
-          <label style={{ fontSize: "12px", marginLeft: "1rem" }}>
-            0x4103FBa0974b7cb5C813d795035ae478E45b2D7b
+          <label style={{ marginLeft: "1rem", color: "green" }}>
+            2.7143 eth
           </label>
         </div>
       </div>

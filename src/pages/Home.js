@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import RequestCard from "../components/RequestCard";
 import MetamaskIcon from "../components/MetamaskIcon";
-import Web3 from "web3";
 //import PropTypes from "prop-types";
+import NavbarLayout from "../layouts/NavbarLayout";
 
+/* You can either create a css file,
+ module.css file or JavaScript object for style like this*/
 const styles = {
   homeGrid: {
     display: "flex",
@@ -42,63 +44,19 @@ const styles = {
   },
   lastMonth: { width: "38%", height: "10rem" },
   lastSixMonths: { width: "60%", height: "10rem" },
+  enableEthereumButton: {
+    padding: "1rem",
+    border: "none",
+    outline: "none",
+    backgroundColor: "#037DD6",
+    color: "white",
+  },
 };
 
-export default function Home() {
-  const [eth_balance, setEthBalance] = useState("");
-  const [accountAddress, setAccountAddress] = useState("");
-
-  let web3 = new Web3(window.ethereum);
-
-  useEffect(() => {
-    connectMetamask();
-  }, []);
-
-  /* Transfers ether to the requester's walled ID */
-  const sendEtherToRequest = async (to) => {
-    try {
-      // Dev account main
-      //0x227da402F13894d89F970804Fc791eb4c9b6f81D is my account ID, it would fail in other environments except mine.
-      const transactionParameters = {
-        nonce: "0x00",
-        gas: "21000",
-        to: to,
-        from: "0x227da402F13894d89F970804Fc791eb4c9b6f81D",
-        value: web3.utils.toWei("0.0001", "ether"),
-        data: "0x7f7465737432000000000000000000000000000000000000000000000000000000600057",
-        chainId: "3",
-      };
-
-      /* Send ether */
-      const txHash = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [transactionParameters],
-      });
-
-      console.log(txHash);
-    } catch (e) {
-      console.error(e.message);
-    }
-  };
-
-  /* This function connects to Metamask wallet if it is installed, 
-    and the data of the first account is projected in the app. */
-  const connectMetamask = async () => {
-    try {
-      const accounts = await web3.eth.getAccounts();
-      const account = accounts[0];
-      setAccountAddress(account);
-
-      let balance = await web3.eth.getBalance(account);
-      balance = await web3.utils.fromWei(balance);
-      setEthBalance(balance);
-    } catch (e) {
-      console.error(e.message);
-    }
-  };
-
+export default function Home(props) {
   return (
-    <>
+    <NavbarLayout>
+      {/* This part is called as conditional rendering, read here https://reactjs.org/docs/conditional-rendering.html */}
       {typeof window.ethereum.isMetaMask === "undefined" && (
         <div
           style={{
@@ -124,19 +82,31 @@ export default function Home() {
         <div style={styles.left}>
           <label style={styles.infoLabel}>My Profile</label>
           <div style={{ ...styles.card, ...styles.myCard }}>
-            <label>
-              <b>Account:</b> {accountAddress}
-            </label>
-            <label>
-              <b>Balance:</b> {eth_balance} eth
-            </label>
+            {props.accountAddress && props.eth_balance ? (
+              <>
+                <label>
+                  <b>Account:</b> {props.accountAddress}
+                </label>
+                <label>
+                  <b>Balance:</b> {props.eth_balance} eth
+                </label>
+              </>
+            ) : (
+              <button
+                style={styles.enableEthereumButton}
+                className="font"
+                onClick={props.enableEthereum}
+              >
+                Enable ethereum
+              </button>
+            )}
           </div>
           <label style={styles.infoLabel}>Quick transaction</label>
           <div style={{ ...styles.card, ...styles.quickTransaction }}></div>
         </div>
         <div style={styles.right}>
           <label style={styles.infoLabel}>Requests</label>
-          <RequestCard sendEtherToRequest={sendEtherToRequest} />
+          <RequestCard sendEtherToRequest={props.sendEtherToRequest} />
           <label style={styles.infoLabel}>All expenses</label>
           <div style={styles.expenses}>
             <div style={{ ...styles.lastMonth, ...styles.card }}></div>
@@ -144,6 +114,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </NavbarLayout>
   );
 }
