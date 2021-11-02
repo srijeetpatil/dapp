@@ -60,22 +60,22 @@ export default function RequestCard(props) {
     <div style={{ ...styles.transactions, ...styles.card }}>
       <div style={styles.profile}>
         <img
-          src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
+          src={props.img}
           alt="Avatar"
-          style={{ height: "8rem", width: "8rem", borderRadius: "50%" }}
+          style={{
+            height: "8rem",
+            width: "8rem",
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
         />
-        <label>Elia Martell</label>
+        <label style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
+          {props.username}
+        </label>
       </div>
       <div style={styles.details}>
-        <label style={{ fontWeight: "600" }}>
-          Charity for Animal Welfare, Navi Mumbai
-        </label>
-        <div>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
-        </div>
+        <label style={{ fontWeight: "600" }}>{props.title}</label>
+        <div>{props.content}</div>
         <div style={styles.buttons}>
           <button
             style={styles.donate}
@@ -92,7 +92,7 @@ export default function RequestCard(props) {
             Read more
           </button>
           <label style={{ marginLeft: "1rem", color: "green" }}>
-            2.7143 eth
+            {props.totalFunds}
           </label>
         </div>
       </div>

@@ -16,6 +16,7 @@ function App() {
     }
   });
 
+  // Initialize the Web3 object
   let web3 = new Web3(window.ethereum);
 
   /* Transfers ether to the requester's walled ID */
@@ -63,7 +64,13 @@ function App() {
 
   /* This function is used to enable Metamask ethereum wallet. */
   const enableEthereum = async () => {
-    await window.ethereum.request({ method: "eth_requestAccounts" });
+    try {
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      /* Reload the app to fetch the ethereum wallet data */
+      window.location.reload();
+    } catch (e) {
+      console.error(e.message);
+    }
   };
 
   return (

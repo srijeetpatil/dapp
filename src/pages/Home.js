@@ -50,14 +50,27 @@ const styles = {
     outline: "none",
     backgroundColor: "#037DD6",
     color: "white",
+    cursor: "pointer",
+  },
+  createRequestButton: {
+    outline: "none",
+    border: "none",
+    padding: "0.6rem 1rem",
+    backgroundColor: "#FFFFFF",
+    color: "#5D2EF0",
+    borderRadius: "5px",
+    boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+    cursor: "pointer",
   },
 };
 
 export default function Home(props) {
   return (
     <NavbarLayout>
-      {/* This part is called as conditional rendering, read here https://reactjs.org/docs/conditional-rendering.html */}
-      {typeof window.ethereum.isMetaMask === "undefined" && (
+      {/* This type of rendering is called as conditional rendering,
+       read here https://reactjs.org/docs/conditional-rendering.html */}
+      {typeof window.ethereum === "undefined" ||
+      typeof window.ethereum.isMetaMask === "undefined" ? (
         <div
           style={{
             display: "flex",
@@ -77,7 +90,7 @@ export default function Home(props) {
           </h4>
           <MetamaskIcon />
         </div>
-      )}
+      ) : null}
       <div style={styles.homeGrid}>
         <div style={styles.left}>
           <label style={styles.infoLabel}>My Profile</label>
@@ -88,7 +101,11 @@ export default function Home(props) {
                   <b>Account:</b> {props.accountAddress}
                 </label>
                 <label>
-                  <b>Balance:</b> {props.eth_balance} eth
+                  <b>Balance:</b>{" "}
+                  {props.eth_balance
+                    ? parseFloat(props.eth_balance).toFixed(6)
+                    : ""}{" "}
+                  eth
                 </label>
               </>
             ) : (
@@ -106,7 +123,24 @@ export default function Home(props) {
         </div>
         <div style={styles.right}>
           <label style={styles.infoLabel}>Requests</label>
-          <RequestCard sendEtherToRequest={props.sendEtherToRequest} />
+          <div
+            style={{ marginTop: "1rem", display: "flex", flexDirection: "row" }}
+          >
+            <button style={styles.createRequestButton} className="font">
+              Create a request +
+            </button>
+          </div>
+          {data.map((post, i) => (
+            <RequestCard
+              sendEtherToRequest={props.sendEtherToRequest}
+              key={i}
+              username={post.username}
+              img={post.img}
+              title={post.title}
+              content={post.content}
+              totalFunds={post.totalFunds}
+            />
+          ))}
           <label style={styles.infoLabel}>All expenses</label>
           <div style={styles.expenses}>
             <div style={{ ...styles.lastMonth, ...styles.card }}></div>
@@ -117,3 +151,23 @@ export default function Home(props) {
     </NavbarLayout>
   );
 }
+
+/* This is dummy data */
+const data = [
+  {
+    img: "https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg",
+    username: "Elia Martell",
+    title: "Charity for Animal Welfare, Navi Mumbai",
+    content:
+      "The BSPCA is a charitable organization in existence since 1874. Its purpose is to prevent cruelty to animals and provide help and relief to all animals in Mumbai city. The animal hospital works 24 hours a day and treats an average of about 400 different species of animals.",
+    totalFunds: "2.7143 eth",
+  },
+  {
+    img: "https://www.socialsciencespace.com/wp-content/uploads/student-3500990_960_720_opt.jpg",
+    username: "Gordon Ramsay",
+    title: "Funding for my masters program at UC Berkeley",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    totalFunds: "2.7143 eth",
+  },
+];
