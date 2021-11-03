@@ -105,7 +105,7 @@ export default function Home(props) {
                   {props.eth_balance
                     ? parseFloat(props.eth_balance).toFixed(6)
                     : ""}{" "}
-                  eth
+                  ETH
                 </label>
               </>
             ) : (
