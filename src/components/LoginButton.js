@@ -1,6 +1,5 @@
 const styles = {
-  menuItem: {
-    padding: "1.5rem 1rem 1.5rem 1rem",
+  menuItem: {    
     width: "max-content",
     cursor: "pointer",
   },
@@ -17,7 +16,7 @@ export default function LoginButton() {
       viewBox="0 0 481.5 481.5"
       height="1rem"
       width="1rem"
-      style={{ ...styles.menuItem, marginLeft: "auto" }}
+      style={{ ...styles.menuItem }}
     >
       <g>
         <g>

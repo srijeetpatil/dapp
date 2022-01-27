@@ -1,5 +1,6 @@
 import React from "react";
 import LoginButton from "./LoginButton";
+import { Link } from "react-router-dom";
 
 const styles = {
   container: {
@@ -27,7 +28,7 @@ const styles = {
   },
 };
 
-export default function Header() {
+export default function Header(props) {
   return (
     <div style={styles.container}>
       <div style={{ ...styles.menuItem, marginRight: "auto" }} className="font">
@@ -36,19 +37,28 @@ export default function Header() {
       <div style={styles.menu}>
         <div style={{ ...styles.menuItem, ...styles.active }}>Home</div>
         <div style={styles.menuItem} className="item">
-          My account
+          Profile
         </div>
-        <div style={styles.menuItem} className="item">
-          Services
-        </div>
-        <div style={styles.menuItem} className="item">
-          Transactions
-        </div>
-        <div style={styles.menuItem} className="item">
-          Statistics
-        </div>
+        <Link
+          style={{ ...styles.menuItem, textDecoration: "none", color: "black" }}
+          className="item"
+          to="/messages"
+        >
+          Messages
+        </Link>
       </div>
-      <LoginButton />
+      {props.user ? (
+        <label style={{ ...styles.menuItem, marginLeft: "auto" }}>
+          <b>{props.user.username}</b>
+        </label>
+      ) : (
+        <Link
+          to="/auth/signup"
+          style={{ ...styles.menuItem, marginLeft: "auto" }}
+        >
+          <LoginButton />
+        </Link>
+      )}
     </div>
   );
 }

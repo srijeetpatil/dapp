@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Downvote, Upvote } from "./Votes";
 
 const styles = {
   card: {
@@ -56,6 +58,13 @@ const styles = {
 };
 
 export default function RequestCard(props) {
+  const [vote, setVote] = useState(0);
+
+  const addVote = (voteNumber) => {
+    if (vote === voteNumber) setVote(0);
+    else setVote(voteNumber);
+  };
+
   return (
     <div style={{ ...styles.transactions, ...styles.card }}>
       <div style={styles.profile}>
@@ -88,12 +97,32 @@ export default function RequestCard(props) {
           >
             Donate 0.1 ether
           </button>
-          <button style={styles.readMore} className="font">
-            Read more
-          </button>
+          <Link to="/request/id/fidjkj23">
+            <button style={styles.readMore} className="font">
+              Read more
+            </button>
+          </Link>
           <label style={{ marginLeft: "1rem", color: "green" }}>
             {props.totalFunds}
           </label>
+          <div
+            style={{
+              marginLeft: "auto",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Upvote
+              addVote={addVote}
+              fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
+            />
+            {props.upvotes - props.downvotes + vote}
+            <Downvote
+              addVote={addVote}
+              fill={vote === -1 ? "#9696F2" : "#ccc"}
+            />
+          </div>
         </div>
       </div>
     </div>

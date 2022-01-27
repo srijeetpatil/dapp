@@ -9,6 +9,11 @@
   font-family: "Sora", sans-serif;
 }
 
+.authApp {
+  width: 64em;
+  margin: auto;
+}
+
 .font {
   font-family: "Sora", sans-serif;
 }
@@ -18,5 +23,5 @@
 }
 
 .item:hover {
-  opacity: 0.6;  
+  opacity: 0.6;
 }
