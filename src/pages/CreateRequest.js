@@ -64,8 +64,8 @@ export default function CreateRequest() {
   };
 
   return (
-    <form style={styles.container}>
-      <h1>Create your request</h1>
+    <form className="container mx-auto flex flex-col">
+      <h1 className="font-2xl font-semibold">Create your request</h1>
       <p>
         Start by adding a title for your request. This way it would be easier
         for people to search by title.

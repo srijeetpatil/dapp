@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import "./index.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Web3 from "web3";
-/* Pages */
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import CreateRequest from "./pages/CreateRequest";
@@ -10,8 +10,8 @@ import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Request from "./pages/Request";
 import Messages from "./pages/Messages";
+import Admin from "./pages/Admin";
 import NavbarLayout from "./layouts/NavbarLayout";
-// api
 import { getMyProfile } from "./api/auth";
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
 
   useEffect(() => {
     const getUser = async () => {
-      let object = await getMyProfile();      
+      let object = await getMyProfile();
       setUser(object.data.result);
     };
     getUser();
@@ -110,6 +110,9 @@ function App() {
           </Route>
           <Route path="/messages">
             <Messages current={current} setCurrent={setCurrent} />
+          </Route>
+          <Route path="/admin">
+            <Admin />
           </Route>
           <Route exact path="/">
             <Home
