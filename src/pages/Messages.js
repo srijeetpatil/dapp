@@ -124,7 +124,7 @@ function Messages(props) {
   }
 
   return (
-    <div style={styles.container}>
+    <div className="container flex mx-auto justify-between">
       <div style={{ width: "30%" }}>
         <input
           type="text"

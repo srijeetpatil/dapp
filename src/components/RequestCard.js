@@ -37,24 +37,7 @@ const styles = {
     flexDirection: "row",
     marginTop: "auto",
     alignItems: "center",
-  },
-  donate: {
-    outline: "none",
-    padding: "0.6rem",
-    border: "solid thin #5C84AD",
-    backgroundColor: "#FFFFFF",
-    cursor: "pointer",
-    color: "#5C84AD",
-  },
-  readMore: {
-    outline: "none",
-    padding: "0.6rem",
-    border: "solid thin #29B1FF",
-    backgroundColor: "#FFFFFF",
-    marginLeft: "1rem",
-    cursor: "pointer",
-    color: "#29B1FF",
-  },
+  }, 
 };
 
 export default function RequestCard(props) {
@@ -66,39 +49,33 @@ export default function RequestCard(props) {
   };
 
   return (
-    <div style={{ ...styles.transactions, ...styles.card }}>
-      <div style={styles.profile}>
+    <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded mb-2">
+      <div className="col-span-2">
         <img
           src={props.img}
           alt="Avatar"
-          style={{
-            height: "8rem",
-            width: "8rem",
-            borderRadius: "50%",
-            objectFit: "cover",
-          }}
+          className="w-full object-contain rounded-xl"
         />
-        <label style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
+        <label className="text-sm">
           {props.username}
         </label>
       </div>
-      <div style={styles.details}>
+      <div className="col-span-10 ml-2">
         <label style={{ fontWeight: "600" }}>{props.title}</label>
-        <div>{props.content}</div>
-        <div style={styles.buttons}>
-          <button
-            style={styles.donate}
-            className="font"
+        <div className="text-sm overflow-hidden">{props.content}</div>
+        <div className="flex text-xs items-center my-2">
+          <button            
+            className="font px-2 py-2 bg-gray-300 rounded shadow mx-2"
             onClick={() =>
               props.sendEtherToRequest(
                 "0x4103FBa0974b7cb5C813d795035ae478E45b2D7b"
               )
             }
           >
-            Donate 0.1 ether
+            Donate ether
           </button>
           <Link to="/request/id/fidjkj23">
-            <button style={styles.readMore} className="font">
+            <button className="font px-2 py-2 rounded shadow mx-2">
               Read more
             </button>
           </Link>

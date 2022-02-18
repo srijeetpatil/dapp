@@ -89,8 +89,8 @@ export default function Signup(props) {
 
   return (
     <AuthLayout>
-      <div style={styles.container}>
-        <h1 style={{ color: "#424242" }}>Sign up</h1>
+      <div className="container flex flex-col w-1/3 mx-auto">
+        <h1 style={{ color: "#424242" }} className="text-xl my-2">Sign up</h1>
         <label style={styles.infoText} className="font">
           Already a member?{" "}
           <Link

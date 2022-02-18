@@ -77,10 +77,10 @@ const styles = {
 
 export default function Home(props) {
   return (
-    <div style={styles.homeGrid}>
-      <div style={styles.left}>
+    <div className="container mx-auto grid grid-cols-12">
+      <div className="sticky col-span-3">
         <label style={styles.infoLabel}>My Profile</label>
-        <div style={{ ...styles.card, ...styles.myCard }}>
+        <div className="rounded shadow bg-white px-4 py-4">
           {props.accounts.length > 0 ? (
             <>
               <label>
@@ -104,21 +104,17 @@ export default function Home(props) {
             </button>
           )}
         </div>
-        <label style={styles.infoLabel}>Trending</label>
-        <div style={{ ...styles.card, ...styles.trending }}>
-          <div style={styles.chip}>#agrofunding</div>
-          <div style={styles.chip}>#education</div>
-          <div style={styles.chip}>#pmcares</div>
-          <div style={styles.chip}>#animalwelfare</div>
-        </div>
       </div>
-      <div style={styles.right}>
+      <div className="col-span-6 mx-4">
         <label style={styles.infoLabel}>Requests</label>
         <div
           style={{ marginTop: "1rem", display: "flex", flexDirection: "row" }}
         >
           <Link to={"/request/create"}>
-            <button style={styles.createRequestButton} className="font">
+            <button
+              style={styles.createRequestButton}
+              className="font mb-4 text-sm"
+            >
               Create a request +
             </button>
           </Link>
@@ -140,6 +136,15 @@ export default function Home(props) {
         <div style={styles.expenses}>
           <div style={{ ...styles.lastMonth, ...styles.card }}></div>
           <div style={{ ...styles.lastSixMonths, ...styles.card }}></div>
+        </div>
+      </div>
+      <div className="col-span-3">
+        <label style={styles.infoLabel}>Trending</label>
+        <div className="rounded shadow bg-white px-4 py-4 flex flex-wrap">
+          <div style={styles.chip}>#agrofunding</div>
+          <div style={styles.chip}>#education</div>
+          <div style={styles.chip}>#pmcares</div>
+          <div style={styles.chip}>#animalwelfare</div>
         </div>
       </div>
     </div>

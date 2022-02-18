@@ -55,7 +55,7 @@ export default function Request(props) {
     else setVote(voteNumber);
   };
   return (
-    <>
+    <div className="container mx-auto">
       <label>6 min ago</label>
       <h1>{data.title}</h1>
       <p>{data.content}</p>
@@ -95,7 +95,7 @@ export default function Request(props) {
           />
         ))}
       </div>{" "}
-    </>
+    </div>
   );
 }
 

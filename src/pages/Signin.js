@@ -80,11 +80,11 @@ export default function Signin(props) {
 
   return (
     <AuthLayout>
-      <div style={styles.container}>
+      <div className="container flex flex-col w-1/3 mx-auto">
         <label style={styles.infoText} className="font">
           Hello User !
         </label>
-        <h1 style={{ color: "#424242" }}>Sign in</h1>
+        <h1 style={{ color: "#424242" }} className="text-xl my-2">Sign in</h1>
         <label style={styles.labelText} className="font">
           Username
         </label>
