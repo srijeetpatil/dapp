@@ -34,19 +34,26 @@ function App() {
   const [current, setCurrent] = useState(-1);
   const [chat, setChat] = useState([]);
 
-  // Get user profile
   useEffect(() => {
-    const getUser = async () => {
+    const main = async () => {
       try {
+        // Get user profile
         let object = await getMyProfile();
         setUser(object.data);
-
+        // Configure a session with the server
         socket.emit("CONFIG", { uid: object.data.id });
       } catch (err) {
         console.error(err);
       }
+
+      try {
+        // Initialize metamask
+        connectMetamask();
+      } catch (err) {
+        console.error(err);
+      }
     };
-    if (!user) getUser();
+    if (!user) main();
   }, [user]);
 
   // Socket io events and getAllrequests
@@ -120,7 +127,6 @@ function App() {
     try {
       await window.ethereum.request({ method: "eth_requestAccounts" });
       const accounts = await web3.eth.getAccounts();
-      console.log(accounts);
       setAccounts([...accounts]);
       const account = accounts[0];
       setAccountAddress(account);
@@ -155,7 +161,7 @@ function App() {
             <Profile />
           </Route>
           <Route path="/request/create">
-            <CreateRequest />
+            <CreateRequest accountAddress={accountAddress} />
           </Route>
           <Route
             path="/request/id/:shortId"

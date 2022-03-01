@@ -83,29 +83,7 @@ export default function Home(props) {
       <div className="grid grid-cols-12">
         <div className="col-span-3">
           <div className="sticky block top-16">
-            <div className="shadow bg-white px-4 py-4">
-              {props.accounts.length > 0 ? (
-                <>
-                  <label>
-                    <b>Account:</b> {props.accountAddress}
-                  </label>
-                  <label>
-                    <b>Balance:</b>{" "}
-                    {props.eth_balance
-                      ? parseFloat(props.eth_balance).toFixed(6)
-                      : ""}{" "}
-                    ETH
-                  </label>
-                </>
-              ) : (
-                <button
-                  style={styles.enableEthereumButton}
-                  className="font"
-                  onClick={props.connectMetamask}
-                >
-                  Enable ethereum
-                </button>
-              )}
+            <div className="shadow bg-white px-4 py-4">              
             </div>
             {props.user && (
               <Link to={"/request/create"}>

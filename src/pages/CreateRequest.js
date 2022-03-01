@@ -52,11 +52,14 @@ const styles = {
   },
 };
 
-export default function CreateRequest() {
+export default function CreateRequest(props) {
   const [type, setType] = useState("");
+  const [ethereumAddress, setEthereumAddress] = useState("");
   const [files, setFiles] = useState({});
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+
+  const { accountAddress } = props;
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -77,13 +80,12 @@ export default function CreateRequest() {
         type="text"
         placeholder="Title"
         className="font"
-        style={styles.input}
+        className="font shadow outline-none px-4 py-4 mt-4 resize-none"
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <textarea
         rows={12}
-        className="font"
-        style={{ ...styles.input, resize: "none" }}
+        className="font shadow outline-none px-4 py-4 mt-4 resize-none"
         placeholder="Describe your issue here"
         onChange={(e) => {
           setContent(e.target.value);
@@ -112,35 +114,39 @@ export default function CreateRequest() {
           );
         })}
       </div>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <FormControl style={styles.formControl}>
-          <InputLabel id="demo-simple-select-label">Type</InputLabel>
+      <div className="flex">
+        <FormControl className="w-1/3">
+          <InputLabel id="demo-simple-select-label" className="mt-4">
+            Type
+          </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={type}
-            label="Age"
+            label="Type"
             onChange={handleChange}
-            style={{ ...styles.select, backgroundColor: "AppWorkspace" }}
+            className="shadow bg-white mt-4"
           >
             <MenuItem value={1}>Donation</MenuItem>
             <MenuItem value={2}>Fundraiser</MenuItem>
             <MenuItem value={3}>Personal</MenuItem>
           </Select>
         </FormControl>
-        {type === 2 && (
-          <input
-            type="text"
-            placeholder="Ethereum address"
-            className="font"
-            style={{ ...styles.input, ...styles.ethereumAddress }}
-          ></input>
-        )}
       </div>
+      {accountAddress && (
+        <div className="flex items-center mt-8">
+          <input type="checkbox" id="use-address"></input>
+          <span className="ml-2">
+            Use <span className="font-semibold">{accountAddress}</span> as
+            ethereum address for this request?
+          </span>
+        </div>
+      )}
       <button
         style={styles.submit}
         className="font"
         onClick={async () => {
+          console.log(document.getElementById("use-address").checked);
           if (title && content && type) {
             await createRequest(title, content, type);
             window.location.href = "/";

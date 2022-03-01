@@ -33,8 +33,8 @@ export default function Header(props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-row sticky block top-0 justify-center bg-white border-b border-gray-200 font text-sm z-10">
-      <div className="font w-max px-4 py-4 mr-auto">AppLogo</div>
+    <div className="flex flex-row sticky block top-0 justify-center items-center bg-white border-b border-gray-200 font text-sm z-10">
+      <div className="font w-max px-4 py-4 mr-auto">SupportMyCause</div>
       <div className="flex">
         <Link style={styles.active} className="w-max px-4 py-4" to="/">
           Home
@@ -75,7 +75,7 @@ export default function Header(props) {
       ) : (
         <Link
           to="/auth/signup"
-          className="w-max px-4 py-4 ml-auto"
+          className="w-max ml-auto"
         >
           <button
             className="text-white px-4 py-2 text-sm rounded"

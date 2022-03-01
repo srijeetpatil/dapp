@@ -218,6 +218,7 @@ function Messages(props) {
                 placeholder="Type a message"
                 className="font"
                 id="message-edit"
+                autocomplete="off"
               ></input>
               <div
                 style={styles.sendButton}
