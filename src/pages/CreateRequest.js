@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import Attach from "../components/AttachFiles";
+import { createRequest } from "../api/main";
 
 const styles = {
   container: {
@@ -54,6 +55,8 @@ const styles = {
 export default function CreateRequest() {
   const [type, setType] = useState("");
   const [files, setFiles] = useState({});
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -64,7 +67,7 @@ export default function CreateRequest() {
   };
 
   return (
-    <form className="container mx-auto flex flex-col">
+    <div className="container mx-auto flex flex-col mt-8">
       <h1 className="font-2xl font-semibold">Create your request</h1>
       <p>
         Start by adding a title for your request. This way it would be easier
@@ -75,12 +78,16 @@ export default function CreateRequest() {
         placeholder="Title"
         className="font"
         style={styles.input}
+        onChange={(e) => setTitle(e.target.value)}
       ></input>
       <textarea
         rows={12}
         className="font"
         style={{ ...styles.input, resize: "none" }}
         placeholder="Describe your issue here"
+        onChange={(e) => {
+          setContent(e.target.value);
+        }}
       ></textarea>
       <input
         id="selectFiles"
@@ -130,9 +137,18 @@ export default function CreateRequest() {
           ></input>
         )}
       </div>
-      <button style={styles.submit} className="font">
+      <button
+        style={styles.submit}
+        className="font"
+        onClick={async () => {
+          if (title && content && type) {
+            await createRequest(title, content, type);
+            window.location.href = "/";
+          }
+        }}
+      >
         Create request
       </button>
-    </form>
+    </div>
   );
 }

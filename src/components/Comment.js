@@ -35,8 +35,8 @@ export default function Comment(props) {
           <label>
             <b>{props.username}</b>
           </label>
-          <p>{props.content}</p>
-          <div style={styles.tags}>
+          <p className="text-sm">{props.content}</p>
+          <div style={styles.tags} className="text-sm">
             <div style={styles.votes}>
               <Upvote
                 addVote={addVote}
@@ -50,21 +50,7 @@ export default function Comment(props) {
             </div>
           </div>
         </div>
-      </div>
-      <div style={{ marginLeft: "2rem" }}>
-        {props.replies &&
-          props.replies.map((comment, i) => (
-            <Comment
-              key={i}
-              img={comment.img}
-              username={comment.username}
-              content={comment.content}
-              upvotes={comment.upvotes}
-              downvotes={comment.downvotes}
-              replies={comment.replies}
-            />
-          ))}
-      </div>
+      </div>    
     </div>
   );
 }

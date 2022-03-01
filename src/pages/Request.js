@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Downvote, Upvote } from "../components/Votes";
 import SendButton from "../components/Send";
 import Comment from "../components/Comment";
-import { Verified, Donation } from "../components/Tags";
 
 const styles = {
   row: { display: "flex", flexDirection: "row" },
@@ -49,19 +48,45 @@ const styles = {
 
 export default function Request(props) {
   const [vote, setVote] = useState(0);
+  const {
+    user,
+    getRequest,
+    title,
+    content,
+    username,
+    type,
+    upvotes,
+    downvotes,
+    status,
+  } = props;
+
+  useEffect(() => {
+    getRequest(props.match.params.shortId);
+  }, []);
 
   const addVote = (voteNumber) => {
     if (vote === voteNumber) setVote(0);
     else setVote(voteNumber);
   };
+
   return (
-    <div className="container mx-auto">
-      <label>6 min ago</label>
-      <h1>{data.title}</h1>
-      <p>{data.content}</p>
-      <div style={{ ...styles.tags, ...styles.row }}>
-        <Verified />
-        <Donation />
+    <div className="container mx-auto mt-8">
+      <label className="text-xs">6 min ago</label>
+      <h1 className="text-xl mb-2">{title}</h1>
+      <p>{content}</p>
+      <div className="flex my-2 text-sm">
+        {status ? (
+          <label className="px-2 py-1 bg-green-100 mx-1 rounded-xl">
+            Verified
+          </label>
+        ) : (
+          <label className="px-2 py-1 bg-red-100 mx-1 rounded-xl">
+            Unverified
+          </label>
+        )}
+        <label className="px-2 py-1 border border-gray-200 mx-1 rounded-xl">
+          {type == 1 ? "Donation" : type == 2 ? "Fundraiser" : "Personal"}
+        </label>
         <div style={styles.votes}>
           <Upvote
             addVote={addVote}
@@ -90,8 +115,7 @@ export default function Request(props) {
             username={comment.username}
             content={comment.content}
             upvotes={comment.upvotes}
-            downvotes={comment.downvotes}
-            replies={comment.replies}
+            downvotes={comment.downvotes}            
           />
         ))}
       </div>{" "}

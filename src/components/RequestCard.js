@@ -1,87 +1,126 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Downvote, Upvote } from "./Votes";
-
-const styles = {
-  card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: "15px",
-    marginTop: "1rem",
-    marginBottom: "1rem",
-    boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 5px",
-  },
-  transactions: {
-    width: "100%",
-    height: "10rem",
-    borderRadius: "15px",
-    marginTop: "1rem",
-    marginBottom: "1rem",
-    padding: "1rem",
-    display: "flex",
-    flexDirection: "row",
-  },
-  profile: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-    marginLeft: "1rem",
-    height: "100%",
-  },
-  buttons: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: "auto",
-    alignItems: "center",
-  }, 
-};
+import { Dialog } from "@mui/material";
+import { initiateChat } from "../api/main";
 
 export default function RequestCard(props) {
   const [vote, setVote] = useState(0);
+  const [chatDialogOpen, setChatDialogOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const addVote = (voteNumber) => {
     if (vote === voteNumber) setVote(0);
     else setVote(voteNumber);
   };
 
+  const {
+    username,
+    title,
+    content,
+    type,
+    status,
+    sendEtherToRequest,
+    upvotes,
+    downvotes,
+    shortId,
+    _id,
+    user,
+  } = props;
+
   return (
     <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded mb-2">
-      <div className="col-span-2">
+      <div className="flex flex-col col-span-2 items-center">
         <img
-          src={props.img}
+          src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
           alt="Avatar"
           className="w-full object-contain rounded-xl"
         />
-        <label className="text-sm">
-          {props.username}
-        </label>
+        <label className="text-sm mt-2">{username}</label>
       </div>
       <div className="col-span-10 ml-2">
-        <label style={{ fontWeight: "600" }}>{props.title}</label>
-        <div className="text-sm overflow-hidden">{props.content}</div>
+        <label style={{ fontWeight: "600" }}>{title}</label>
+        <div className="text-sm overflow-hidden">{content}</div>
+        <div className="flex text-xs mt-2">
+          <label className="px-2 py-1 border border-gray-200 mx-1 rounded-xl">
+            {type == 1 ? "Donation" : type == 2 ? "Fundraiser" : "Personal"}
+          </label>
+          {status ? (
+            <label className="px-2 py-1 bg-green-100 mx-1 rounded-xl">
+              Verified
+            </label>
+          ) : (
+            <label className="px-2 py-1 bg-red-100 mx-1 rounded-xl">
+              Unverified
+            </label>
+          )}
+        </div>
         <div className="flex text-xs items-center my-2">
-          <button            
-            className="font px-2 py-2 bg-gray-300 rounded shadow mx-2"
+          <button
+            className="font px-2 py-2 bg-gray-300 rounded shadow mx-1"
             onClick={() =>
-              props.sendEtherToRequest(
-                "0x4103FBa0974b7cb5C813d795035ae478E45b2D7b"
-              )
+              sendEtherToRequest("0x4103FBa0974b7cb5C813d795035ae478E45b2D7b")
             }
           >
             Donate ether
           </button>
-          <Link to="/request/id/fidjkj23">
-            <button className="font px-2 py-2 rounded shadow mx-2">
+          {user && user.username !== username && (
+            <>
+              <button
+                className="font px-2 py-2 rounded shadow mx-1"
+                onClick={() => setChatDialogOpen(true)}
+              >
+                Chat
+              </button>
+              <Dialog
+                onClose={() => setChatDialogOpen(false)}
+                open={chatDialogOpen}
+                className="w-1/3 mx-auto"
+                fullWidth
+                maxWidth="sm"
+              >
+                <div className="shadow px-4 py-4 font flex flex-col">
+                  <label className="text-black text-sm">
+                    Start a conversation with {username}?
+                  </label>
+                  <textarea
+                    className="w-full border border-gray-200 outline-none my-2 px-1 py-1 text-sm"
+                    placeholder="Start with a message"
+                    rows={5}
+                    onChange={(e) => setMessage(e.target.value)}
+                  ></textarea>
+                  <div className="flex">
+                    <button
+                      className="mt-4 text-white px-4 py-2 text-xs rounded"
+                      style={{ backgroundColor: "#5032F6" }}
+                      onClick={() => {
+                        if (message) {
+                          initiateChat(_id, message);
+                          setChatDialogOpen(false);
+                          window.location.href = "/messages";
+                        }
+                      }}
+                    >
+                      Send
+                    </button>
+                    <button
+                      className="ml-2 mt-4 px-4 py-2 text-xs rounded shadow"
+                      onClick={() => {
+                        setChatDialogOpen(false);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </Dialog>
+            </>
+          )}
+          <Link to={`/request/id/${shortId}`}>
+            <button className="font px-2 py-2 rounded shadow mx-1">
               Read more
             </button>
           </Link>
-          <label style={{ marginLeft: "1rem", color: "green" }}>
-            {props.totalFunds}
-          </label>
           <div
             style={{
               marginLeft: "auto",
@@ -94,7 +133,7 @@ export default function RequestCard(props) {
               addVote={addVote}
               fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
             />
-            {props.upvotes - props.downvotes + vote}
+            {upvotes - downvotes + vote}
             <Downvote
               addVote={addVote}
               fill={vote === -1 ? "#9696F2" : "#ccc"}

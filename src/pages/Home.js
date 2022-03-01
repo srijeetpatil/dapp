@@ -76,75 +76,77 @@ const styles = {
 };
 
 export default function Home(props) {
+  const { user } = props;
+
   return (
-    <div className="container mx-auto grid grid-cols-12">
-      <div className="sticky col-span-3">
-        <label style={styles.infoLabel}>My Profile</label>
-        <div className="rounded shadow bg-white px-4 py-4">
-          {props.accounts.length > 0 ? (
-            <>
-              <label>
-                <b>Account:</b> {props.accountAddress}
-              </label>
-              <label>
-                <b>Balance:</b>{" "}
-                {props.eth_balance
-                  ? parseFloat(props.eth_balance).toFixed(6)
-                  : ""}{" "}
-                ETH
-              </label>
-            </>
-          ) : (
-            <button
-              style={styles.enableEthereumButton}
-              className="font"
-              onClick={props.connectMetamask}
-            >
-              Enable ethereum
-            </button>
-          )}
+    <div className="container mx-auto">
+      <div className="grid grid-cols-12">
+        <div className="col-span-3">
+          <div className="sticky block top-16">
+            <div className="shadow bg-white px-4 py-4">
+              {props.accounts.length > 0 ? (
+                <>
+                  <label>
+                    <b>Account:</b> {props.accountAddress}
+                  </label>
+                  <label>
+                    <b>Balance:</b>{" "}
+                    {props.eth_balance
+                      ? parseFloat(props.eth_balance).toFixed(6)
+                      : ""}{" "}
+                    ETH
+                  </label>
+                </>
+              ) : (
+                <button
+                  style={styles.enableEthereumButton}
+                  className="font"
+                  onClick={props.connectMetamask}
+                >
+                  Enable ethereum
+                </button>
+              )}
+            </div>
+            {props.user && (
+              <Link to={"/request/create"}>
+                <button
+                  style={styles.createRequestButton}
+                  className="font text-sm my-4"
+                >
+                  Create a request +
+                </button>
+              </Link>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="col-span-6 mx-4">
-        <label style={styles.infoLabel}>Requests</label>
-        <div
-          style={{ marginTop: "1rem", display: "flex", flexDirection: "row" }}
-        >
-          <Link to={"/request/create"}>
-            <button
-              style={styles.createRequestButton}
-              className="font mb-4 text-sm"
-            >
-              Create a request +
-            </button>
-          </Link>
+        <div className="col-span-6 mx-2 mt-2">
+          {props.requests.map((post, i) => (
+            <RequestCard
+              sendEtherToRequest={props.sendEtherToRequest}
+              key={i}
+              username={post.created_by.username}
+              title={post.title}
+              content={post.content}
+              totalFunds={post.totalFunds}
+              upvotes={post.upvotes}
+              downvotes={post.downvotes}
+              status={post.verified}
+              type={post.type}
+              shortId={post.shortId}
+              _id={post.created_by._id}
+              user={user}
+            />
+          ))}
         </div>
-        {data.map((post, i) => (
-          <RequestCard
-            sendEtherToRequest={props.sendEtherToRequest}
-            key={i}
-            username={post.username}
-            img={post.img}
-            title={post.title}
-            content={post.content}
-            totalFunds={post.totalFunds}
-            upvotes={post.upvotes}
-            downvotes={post.downvotes}
-          />
-        ))}
-        <label style={styles.infoLabel}>All expenses</label>
-        <div style={styles.expenses}>
-          <div style={{ ...styles.lastMonth, ...styles.card }}></div>
-          <div style={{ ...styles.lastSixMonths, ...styles.card }}></div>
-        </div>
-      </div>
-      <div className="col-span-3">
-        <label style={styles.infoLabel}>Trending</label>
-        <div className="rounded shadow bg-white px-4 py-4 flex flex-wrap">
-          <div style={styles.chip}>#agrofunding</div>
-          <div style={styles.chip}>#education</div>
-          <div style={styles.chip}>#pmcares</div>
-          <div style={styles.chip}>#animalwelfare</div>
+        <div className="col-span-3">
+          <div className="sticky block top-16">
+            <div className="shadow bg-white px-4 py-4 flex flex-wrap">
+              <div style={styles.chip}>#agrofunding</div>
+              <div style={styles.chip}>#education</div>
+              <div style={styles.chip}>#pmcares</div>
+              <div style={styles.chip}>#animalwelfare</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

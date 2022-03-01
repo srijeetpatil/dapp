@@ -89,7 +89,7 @@ const styles = {
 };
 
 function Messages(props) {
-  useEffect(() => {}, [props]);
+  const { current, setCurrent, user, sendMessage, chat } = props;
 
   // This method is explicitly described because, it does multiple things like
   // * Adding a profile picture on every first incoming message
@@ -98,23 +98,29 @@ function Messages(props) {
   function chatFeature() {
     let messageArray = [];
 
-    for (
-      let message = 0;
-      message < chats[props.current].chat.length;
-      message++
-    ) {
-      let messageBody = chats[props.current].chat[message];
+    if (current === -1) {
+      return messageArray;
+    }
 
-      if (messageBody.incoming) {
+    for (let message = 0; message < chat.length; message++) {
+      let messageBody = chat[message];
+
+      if (messageBody.reciever === user.id) {
         messageArray.push(
-          <div style={styles.messageIn} key={message}>
-            {messageBody.content}
+          <div
+            className="px-4 py-6 mb-2 w-max bg-gray-100 rounded-b-3xl rounded-tr-3xl"
+            key={message}
+          >
+            {messageBody.message}
           </div>
         );
       } else {
         messageArray.push(
-          <div style={styles.messageOut} key={message}>
-            {messageBody.content}
+          <div
+            className="px-4 py-6 mb-2 ml-auto w-max bg-indigo-900 text-white rounded-b-3xl rounded-tl-3xl"
+            key={message}
+          >
+            {messageBody.message}
           </div>
         );
       }
@@ -124,7 +130,7 @@ function Messages(props) {
   }
 
   return (
-    <div className="container flex mx-auto justify-between">
+    <div className="container flex mx-auto justify-between mt-8">
       <div style={{ width: "30%" }}>
         <input
           type="text"
@@ -133,27 +139,44 @@ function Messages(props) {
           className="font"
         ></input>
         <div style={styles.card}>
-          {chats.map((contact, i) => (
-            <div
-              style={styles.contact}
-              key={i}
-              onClick={() => props.setCurrent(i)}
-              className="item"
-            >
-              <img src={contact.picture} alt="Avatar" style={styles.image} />
-              <div style={styles.contactDetails}>
-                <div style={{ width: "100%" }}>
-                  <label>
-                    <b>{contact.name}</b>
-                  </label>
+          {user &&
+            user?.chat?.map((contact, i) => (
+              <div
+                style={styles.contact}
+                key={i}
+                onClick={() => {
+                  let id =
+                    user.chat[current]?.sender?.username === user.username
+                      ? user.chat[current]?.reciever?._id
+                      : user.chat[current]?.sender?._id;
+                  setCurrent(i);                  
+                }}
+                className="item"
+              >
+                <img
+                  src={
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhVoqZVRdPWcuTCEHaphmign8QVLxGeyCXQ&usqp=CAU"
+                  }
+                  alt="Avatar"
+                  style={styles.image}
+                />
+                <div style={styles.contactDetails}>
+                  <div style={{ width: "100%" }}>
+                    <label>
+                      <b>
+                        {contact.sender?.username === user.username
+                          ? contact.reciever?.username
+                          : contact.sender?.username}
+                      </b>
+                    </label>
+                  </div>
+                  <p>{contact.content}</p>
                 </div>
-                <p>{contact.lastMessage}</p>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
-      <div style={{ width: "60%" }}>
+      <div style={{ width: "60%" }} className="h-screen">
         <button
           style={{ ...styles.button, marginLeft: "auto" }}
           className="font"
@@ -166,19 +189,50 @@ function Messages(props) {
         >
           More
         </button>
-        <div style={{ ...styles.card, height: "60vh" }}>
-          <div>{chatFeature()}</div>
-          <div style={styles.chatBox}>
-            <input
-              type="text"
-              style={styles.chatInput}
-              placeholder="Type a message"
-              className="font"
-            ></input>
-            <div style={styles.sendButton}>
-              <SendButton />
-            </div>
+        <div className="h-2/3 rounded-3xl flex flex-col px-4 py-4 bg-white mt-8">
+          <div>
+            {user && current !== -1 && (
+              <>
+                {user?.chat[current]?.sender?.username === user.username ? (
+                  <div className="px-4 py-6 mb-2 ml-auto w-max bg-indigo-900 text-white rounded-b-3xl rounded-tl-3xl">
+                    {user?.chat[current]?.content}
+                  </div>
+                ) : (
+                  <div className="px-4 py-6 mb-2 w-max bg-gray-100 rounded-b-3xl rounded-tr-3xl">
+                    {user?.chat[current]?.content}
+                  </div>
+                )}
+              </>
+            )}
+            {chatFeature()}
           </div>
+          {current === -1 ? (
+            <div className="flex justify-center items-center h-full">
+              <span className="text-2xl">Start chatting with people</span>
+            </div>
+          ) : (
+            <div style={styles.chatBox}>
+              <input
+                type="text"
+                style={styles.chatInput}
+                placeholder="Type a message"
+                className="font"
+                id="message-edit"
+              ></input>
+              <div
+                style={styles.sendButton}
+                onClick={() => {
+                  let id =
+                    user.chat[current].sender.username === user.username
+                      ? user.chat[current].reciever._id
+                      : user.chat[current].sender._id;
+                  sendMessage(id);                  
+                }}
+              >
+                <SendButton />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

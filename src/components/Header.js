@@ -1,6 +1,7 @@
-import React from "react";
+import { useState } from "react";
 import LoginButton from "./LoginButton";
 import { Link } from "react-router-dom";
+import { Dialog } from "@mui/material";
 
 const styles = {
   container: {
@@ -29,34 +30,59 @@ const styles = {
 };
 
 export default function Header(props) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div style={styles.container}>
-      <div style={{ ...styles.menuItem, marginRight: "auto" }} className="font">
-        AppLogo
-      </div>
-      <div style={styles.menu}>
-        <div style={{ ...styles.menuItem, ...styles.active }}>Home</div>
-        <div style={styles.menuItem} className="item">
-          Profile
-        </div>
-        <Link
-          style={{ ...styles.menuItem, textDecoration: "none", color: "black" }}
-          className="item"
-          to="/messages"
-        >
+    <div className="flex flex-row sticky block top-0 justify-center bg-white border-b border-gray-200 font text-sm z-10">
+      <div className="font w-max px-4 py-4 mr-auto">AppLogo</div>
+      <div className="flex">
+        <Link style={styles.active} className="w-max px-4 py-4" to="/">
+          Home
+        </Link>
+        <div className="w-max px-4 py-4">Profile</div>
+        <Link className="w-max px-4 py-4" to="/messages">
           Messages
         </Link>
       </div>
       {props.user ? (
-        <label style={{ ...styles.menuItem, marginLeft: "auto" }}>
-          <b>{props.user.username}</b>
-        </label>
+        <>
+          <label
+            className="w-max px-4 py-4 ml-auto cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            {props.user.username}
+          </label>
+          <Dialog
+            onClose={() => setOpen(false)}
+            open={open}
+            className="w-1/5 mx-auto"
+          >
+            <div className="shadow px-12 py-4 font flex flex-col items-center">
+              <label>Hi, {props.user.username}</label>
+              <button
+                className="mt-4 text-white px-4 py-2 text-sm rounded"
+                style={{ backgroundColor: "#5032F6" }}
+                onClick={() => {
+                  localStorage.removeItem("auth");
+                  window.location.href = "/";
+                }}
+              >
+                Sign out
+              </button>
+            </div>
+          </Dialog>
+        </>
       ) : (
         <Link
           to="/auth/signup"
-          style={{ ...styles.menuItem, marginLeft: "auto" }}
+          className="w-max px-4 py-4 ml-auto"
         >
-          <LoginButton />
+          <button
+            className="text-white px-4 py-2 text-sm rounded"
+            style={{ backgroundColor: "#5032F6" }}
+          >
+            Sign up
+          </button>
         </Link>
       )}
     </div>

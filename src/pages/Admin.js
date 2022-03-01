@@ -1,6 +1,6 @@
 export default function Admin() {
   return (
-    <>
+    <div className="container mx-auto mt-8">
       <label className="text-3xl font-semibold">Admin</label>
       <div className="flex flex-row mt-8 text-sm">
         <div className="border border-gray-200 rounded px-4 py-2 w-1/6 mr-4">
@@ -33,6 +33,6 @@ export default function Admin() {
           <label className="col-span-2">Tue 26 Feb 2021</label>
         </div>
       ))}
-    </>
+    </div>
   );
 }
