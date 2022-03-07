@@ -17,7 +17,8 @@ import { getAllRequests } from "./api/main";
 import { getRequestById } from "./api/main";
 import { io } from "socket.io-client";
 
-var uri = "http://localhost:3000/";
+var uri = "https://supportmycause-backend.herokuapp.com/";
+// http://localhost:3000/
 
 var socket = io(uri);
 
