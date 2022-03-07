@@ -133,22 +133,35 @@ export default function CreateRequest(props) {
           </Select>
         </FormControl>
       </div>
-      {accountAddress && (
-        <div className="flex items-center mt-8">
+      {accountAddress ? (
+        <div className="flex items-center mt-8 text-sm">
           <input type="checkbox" id="use-address"></input>
           <span className="ml-2">
             Use <span className="font-semibold">{accountAddress}</span> as
             ethereum address for this request?
           </span>
         </div>
+      ) : (
+        <div className="mt-8 text-sm text-gray-500">
+          Cannot see your ethereum address? Activate ethereum wallet by adding
+          Metamask to your browser. If done, sign in to your Metamask account
+          and refresh this page.
+        </div>
       )}
       <button
         style={styles.submit}
         className="font"
         onClick={async () => {
-          console.log(document.getElementById("use-address").checked);
           if (title && content && type) {
-            await createRequest(title, content, type);
+            await createRequest(
+              title,
+              content,
+              type,
+              document.getElementById("use-address") &&
+                document.getElementById("use-address").checked
+                ? accountAddress
+                : ""
+            );
             window.location.href = "/";
           }
         }}

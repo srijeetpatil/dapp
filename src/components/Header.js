@@ -36,11 +36,25 @@ export default function Header(props) {
     <div className="flex flex-row sticky block top-0 justify-center items-center bg-white border-b border-gray-200 font text-sm z-10">
       <div className="font w-max px-4 py-4 mr-auto">SupportMyCause</div>
       <div className="flex">
-        <Link style={styles.active} className="w-max px-4 py-4" to="/">
+        <Link
+          style={window.location.pathname === "/" ? styles.active : {}}
+          className="w-max px-4 py-4"
+          to="/"
+        >
           Home
         </Link>
-        <div className="w-max px-4 py-4">Profile</div>
-        <Link className="w-max px-4 py-4" to="/messages">
+        <Link
+          style={window.location.pathname === "/profile" ? styles.active : {}}
+          className="w-max px-4 py-4"
+          to="/profile"
+        >
+          Profile
+        </Link>
+        <Link
+          style={window.location.pathname === "/messages" ? styles.active : {}}
+          className="w-max px-4 py-4"
+          to="/messages"
+        >
           Messages
         </Link>
       </div>
@@ -73,10 +87,7 @@ export default function Header(props) {
           </Dialog>
         </>
       ) : (
-        <Link
-          to="/auth/signup"
-          className="w-max ml-auto"
-        >
+        <Link to="/auth/signup" className="w-max ml-auto">
           <button
             className="text-white px-4 py-2 text-sm rounded"
             style={{ backgroundColor: "#5032F6" }}

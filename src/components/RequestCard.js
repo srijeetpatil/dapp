@@ -1,19 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Downvote, Upvote } from "./Votes";
 import { Dialog } from "@mui/material";
 import { initiateChat } from "../api/main";
 
 export default function RequestCard(props) {
-  const [vote, setVote] = useState(0);
-  const [chatDialogOpen, setChatDialogOpen] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const addVote = (voteNumber) => {
-    if (vote === voteNumber) setVote(0);
-    else setVote(voteNumber);
-  };
-
   const {
     username,
     title,
@@ -26,15 +17,50 @@ export default function RequestCard(props) {
     shortId,
     _id,
     user,
+    eth_address,
   } = props;
 
+  const [vote, setVote] = useState(0);
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [chatDialogOpen, setChatDialogOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const addVote = (voteValue) => {
+    if (voteValue === 1) {
+      if (vote === 1) {
+        setVote(0);
+        setTotalVotes(totalVotes - 1);
+      } else {
+        setVote(1);
+        setTotalVotes(totalVotes + 1);
+      }
+    } else {
+      if (vote === -1) {
+        setVote(0);
+        setTotalVotes(totalVotes + 1);
+      } else {
+        setVote(-1);
+        setTotalVotes(totalVotes - 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      if (upvotes.indexOf(user.id) !== -1) setVote(1);
+      else if (downvotes.indexOf(user.id) !== -1) setVote(-1);
+
+      setTotalVotes(upvotes.length - downvotes.length);
+    }
+  }, [user]);
+
   return (
-    <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded mb-2">
+    <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
       <div className="flex flex-col col-span-2 items-center">
         <img
           src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
           alt="Avatar"
-          className="w-full object-contain rounded-xl"
+          className="w-full object-contain rounded-full"
         />
         <label className="text-sm mt-2">{username}</label>
       </div>
@@ -56,14 +82,16 @@ export default function RequestCard(props) {
           )}
         </div>
         <div className="flex text-xs items-center my-2">
-          <button
-            className="font px-2 py-2 bg-gray-300 rounded shadow mx-1"
-            onClick={() =>
-              sendEtherToRequest("0x4103FBa0974b7cb5C813d795035ae478E45b2D7b")
-            }
-          >
-            Donate ether
-          </button>
+          {eth_address && (
+            <button
+              className="font px-2 py-2 bg-gray-300 rounded shadow mx-1"
+              onClick={() =>
+                sendEtherToRequest("0x4103FBa0974b7cb5C813d795035ae478E45b2D7b")
+              }
+            >
+              Donate ether
+            </button>
+          )}
           {user && user.username !== username && (
             <>
               <button
@@ -121,19 +149,12 @@ export default function RequestCard(props) {
               Read more
             </button>
           </Link>
-          <div
-            style={{
-              marginLeft: "auto",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+          <div className="ml-auto flex items-center select-none">
             <Upvote
               addVote={addVote}
               fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
             />
-            {upvotes - downvotes + vote}
+            {totalVotes}
             <Downvote
               addVote={addVote}
               fill={vote === -1 ? "#9696F2" : "#ccc"}

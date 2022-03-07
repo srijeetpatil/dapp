@@ -83,7 +83,24 @@ export default function Home(props) {
       <div className="grid grid-cols-12">
         <div className="col-span-3">
           <div className="sticky block top-16">
-            <div className="shadow bg-white px-4 py-4">              
+            <div className="shadow bg-white px-4 py-4 rounded-2xl">
+              <div className="flex flex-col items-center">
+                <img
+                  src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
+                  alt="Avatar"
+                  className="w-1/3 object-contain rounded-full"
+                ></img>
+                <label className="mt-4 text-xl">{user?.username}</label>
+                <label className="mt-4 text-sm">Karma: {user?.karma}</label>
+              </div>
+              <div className="mt-4 text-xs border-b border-gray-200 w-full py-2 min-h-16">
+                Posts
+              </div>
+              <div className="text-xs my-2 text-gray-500">Nothing to show!</div>
+              <div className="mt-4 text-xs border-b border-gray-200 w-full py-2">
+                Comments
+              </div>
+              <div className="text-xs my-2 text-gray-500">Nothing to show!</div>
             </div>
             {props.user && (
               <Link to={"/request/create"}>
@@ -112,13 +129,15 @@ export default function Home(props) {
               type={post.type}
               shortId={post.shortId}
               _id={post.created_by._id}
+              eth_address={post.eth_address}
               user={user}
             />
           ))}
+          <div className="text-center mt-8 text-gray-500">Oops reached the end!</div>
         </div>
         <div className="col-span-3">
           <div className="sticky block top-16">
-            <div className="shadow bg-white px-4 py-4 flex flex-wrap">
+            <div className="shadow bg-white px-4 py-4 flex flex-wrap rounded-2xl">
               <div style={styles.chip}>#agrofunding</div>
               <div style={styles.chip}>#education</div>
               <div style={styles.chip}>#pmcares</div>

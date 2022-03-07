@@ -2,7 +2,7 @@ import axios from "axios";
 import { getFromStore } from "./localstore";
 
 const axiosConfig = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "https://supportmycause-backend.herokuapp.com/",
 });
 
 axiosConfig.interceptors.request.use(
