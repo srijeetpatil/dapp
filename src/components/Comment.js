@@ -21,14 +21,8 @@ const styles = {
 };
 
 export default function Comment(props) {
-  const [vote, setVote] = useState(0);
-
-  const addVote = (voteNumber) => {
-    if (vote === voteNumber) setVote(0);
-    else setVote(voteNumber);
-  };
   return (
-    <div style={styles.col}>
+    <div style={styles.col} className="mb-8">
       <div style={styles.row}>
         <img style={styles.image} src={props.img}></img>
         <div style={{ ...styles.col, marginLeft: "1rem" }}>
@@ -36,21 +30,8 @@ export default function Comment(props) {
             <b>{props.username}</b>
           </label>
           <p className="text-sm">{props.content}</p>
-          <div style={styles.tags} className="text-sm">
-            <div style={styles.votes}>
-              <Upvote
-                addVote={addVote}
-                fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
-              />
-              {props.upvotes - props.downvotes + vote}
-              <Downvote
-                addVote={addVote}
-                fill={vote === -1 ? "#9696F2" : "#ccc"}
-              />
-            </div>
-          </div>
         </div>
-      </div>    
+      </div>
     </div>
   );
 }

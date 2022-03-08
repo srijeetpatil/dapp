@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Downvote, Upvote } from "./Votes";
 import { Dialog } from "@mui/material";
-import { initiateChat } from "../api/main";
+import { initiateChat, upvotePost, downvotePost } from "../api/main";
 
 export default function RequestCard(props) {
   const {
@@ -25,23 +25,31 @@ export default function RequestCard(props) {
   const [chatDialogOpen, setChatDialogOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  const addVote = (voteValue) => {
+  const addVote = async (voteValue) => {
     if (voteValue === 1) {
       if (vote === 1) {
         setVote(0);
         setTotalVotes(totalVotes - 1);
+      } else if (vote === -1) {
+        setVote(1);
+        setTotalVotes(totalVotes + 2);
       } else {
         setVote(1);
         setTotalVotes(totalVotes + 1);
       }
+      await upvotePost(shortId);
     } else {
       if (vote === -1) {
         setVote(0);
         setTotalVotes(totalVotes + 1);
+      } else if (vote === 1) {
+        setVote(-1);
+        setTotalVotes(totalVotes - 2);
       } else {
         setVote(-1);
         setTotalVotes(totalVotes - 1);
       }
+      await downvotePost(shortId);
     }
   };
 

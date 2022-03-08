@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import "./index.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -17,8 +17,13 @@ import { getAllRequests } from "./api/main";
 import { getRequestById } from "./api/main";
 import { io } from "socket.io-client";
 
-var uri = "https://supportmycause-backend.herokuapp.com/";
-// http://localhost:3000/
+var os = require("os");
+
+var uri = "/";
+
+if (os.hostname().indexOf("local") > -1) {
+  uri = "http://localhost:3000/";
+}
 
 var socket = io(uri);
 
@@ -138,7 +143,7 @@ function App() {
     } catch (e) {
       console.error(e.message);
     }
-  };
+  };  
 
   return (
     <Router>
@@ -179,6 +184,7 @@ function App() {
                 upvotes={activeRequest?.upvotes}
                 downvotes={activeRequest?.downvotes}
                 status={activeRequest?.verified}
+                id={activeRequest?._id}
               />
             )}
           />

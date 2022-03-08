@@ -1,8 +1,16 @@
 import axios from "axios";
 import { getFromStore } from "./localstore";
 
+var os = require("os");
+
+var uri = "/";
+
+if (os.hostname().indexOf("local") > -1) {
+  uri = "http://localhost:3000/";
+}
+
 const axiosConfig = axios.create({
-  baseURL: "https://supportmycause-backend.herokuapp.com/",
+  baseURL: uri,
 });
 
 axiosConfig.interceptors.request.use(

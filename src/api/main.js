@@ -41,6 +41,28 @@ export async function createRequest(title, content, type, eth_address) {
   return responseFromApi;
 }
 
+export async function upvotePost(shortId) {
+  let responseFromApi;
+  try {
+    responseFromApi = await axios.post("/requests/upvote/" + shortId);
+  } catch (err) {
+    console.error(err);
+  }
+
+  return responseFromApi;
+}
+
+export async function downvotePost(shortId) {
+  let responseFromApi;
+  try {
+    responseFromApi = await axios.post("/requests/downvote/" + shortId);
+  } catch (err) {
+    console.error(err);
+  }
+
+  return responseFromApi;
+}
+
 // All chat related APIs
 
 export async function initiateChat(reciever, message) {
@@ -55,4 +77,30 @@ export async function initiateChat(reciever, message) {
   }
 
   return responseFromApi;
+}
+
+// All comments related APIs
+
+export async function addComment(content, postId) {
+  let responseFromApi;
+  try {
+    let formData = new FormData();
+    formData.append("content", content);
+    responseFromApi = await axios.post("/comment/post/" + postId, formData);
+  } catch (err) {
+    console.error(err);
+  }
+
+  return responseFromApi;
+}
+
+export async function getAllComments(postId) {
+  let responseFromApi;
+  try {
+    responseFromApi = await axios.get("/comment/all/" + postId);    
+  } catch (err) {
+    console.error(err);
+  }
+
+  return responseFromApi.data.comments;
 }

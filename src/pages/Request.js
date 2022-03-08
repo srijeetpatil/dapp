@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Downvote, Upvote } from "../components/Votes";
 import SendButton from "../components/Send";
 import Comment from "../components/Comment";
+import { getAllComments, addComment } from "../api/main";
 
 const styles = {
   row: { display: "flex", flexDirection: "row" },
@@ -47,7 +48,6 @@ const styles = {
 };
 
 export default function Request(props) {
-  const [vote, setVote] = useState(0);
   const {
     user,
     getRequest,
@@ -58,11 +58,22 @@ export default function Request(props) {
     upvotes,
     downvotes,
     status,
+    id,
   } = props;
+  const [vote, setVote] = useState(0);
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
-    getRequest(props.match.params.shortId);
-  }, []);
+    const main = async () => {
+      if (!id) getRequest(props.match.params.shortId);
+      else {
+        let comments = await getAllComments(id);
+        setComments(comments);
+      }
+    };
+    main();
+  }, [id]);
 
   const addVote = (voteNumber) => {
     if (vote === voteNumber) setVote(0);
@@ -96,52 +107,37 @@ export default function Request(props) {
           <Downvote addVote={addVote} fill={vote === -1 ? "#9696F2" : "#ccc"} />
         </div>
       </div>
-      <div style={styles.chatBox}>
+      <div style={styles.chatBox} onChange={(e) => setComment(e.target.value)}>
         <input
           type="text"
           style={styles.chatInput}
           placeholder="Write a comment"
           className="font"
+          id="comment-textarea"
         ></input>
         <div style={styles.sendButton}>
-          <SendButton />
+          <SendButton
+            addComment={addComment}
+            comment={comment}
+            id={id}
+            setComments={setComments}
+            comments={comments}
+          />
         </div>
       </div>
       <div style={styles.comments}>
         {comments.map((comment, i) => (
           <Comment
             key={i}
-            img={comment.img}
-            username={comment.username}
+            img={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
+            username={comment.author.username}
             content={comment.content}
-            upvotes={comment.upvotes}
-            downvotes={comment.downvotes}            
           />
         ))}
       </div>{" "}
     </div>
   );
 }
-
-const comments = [
-  {
-    img: "https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg",
-    username: "Elia Martell",
-    content: "I have been buying this coin all the way down.",
-    upvotes: 0,
-    downvotes: 0,
-    replies: [
-      {
-        img: "https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg",
-        username: "Elia Martell",
-        content:
-          "I'm always excited for a coin to be on the rise. However XRP is down in 24h",
-        upvotes: 15,
-        downvotes: 0,
-      },
-    ],
-  },
-];
 
 const data = {
   img: "https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg",

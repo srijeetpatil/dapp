@@ -1,4 +1,6 @@
 export default function SendButton(props) {
+  const { addComment, comment, id, setComments, comments } = props;
+
   return (
     <svg
       version="1.0"
@@ -8,6 +10,15 @@ export default function SendButton(props) {
       viewBox="0 0 512.000000 512.000000"
       preserveAspectRatio="xMidYMid meet"
       style={{ cursor: "pointer", padding: "auto" }}
+      onClick={async () => {
+        if (comment) {
+          await addComment(comment, id);
+          let newComments = comments;
+          newComments.push({ author: { username: "You" }, content: comment });
+          setComments([...newComments]);
+          document.getElementById("comment-textarea").value = "";
+        }
+      }}
     >
       <g
         transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
