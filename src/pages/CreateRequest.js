@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import Attach from "../components/AttachFiles";
 import { createRequest } from "../api/main";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../utils/firebase";
+var uniqueFilename = require("unique-filename");
 
 const styles = {
   container: {
@@ -53,13 +56,12 @@ const styles = {
 };
 
 export default function CreateRequest(props) {
-  const [type, setType] = useState("");
-  const [ethereumAddress, setEthereumAddress] = useState("");
+  const [type, setType] = useState("");  
   const [files, setFiles] = useState({});
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
-  const { accountAddress } = props;
+  const { accountAddress, user } = props;
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -79,7 +81,6 @@ export default function CreateRequest(props) {
       <input
         type="text"
         placeholder="Title"
-        className="font"
         className="font shadow outline-none px-4 py-4 mt-4 resize-none"
         onChange={(e) => setTitle(e.target.value)}
       ></input>
@@ -94,7 +95,7 @@ export default function CreateRequest(props) {
       <input
         id="selectFiles"
         type="file"
-        accept="image/*, video/*"
+        accept="image/*"
         multiple
         onChange={(e) => setFiles(e.target.files)}
         style={{ display: "none" }}
@@ -102,9 +103,7 @@ export default function CreateRequest(props) {
       <div style={{ ...styles.attach, marginTop: "1rem" }}>
         <div style={styles.attach} onClick={handleAttachClick}>
           <Attach />
-          <label style={{ cursor: "pointer", marginLeft: "10px" }}>
-            Attach files
-          </label>
+          <label className="cursor-pointer ml-2">Attach files</label>
         </div>
         {Object.keys(files).map((file, i) => {
           return (
@@ -153,6 +152,24 @@ export default function CreateRequest(props) {
         className="font"
         onClick={async () => {
           if (title && content && type) {
+            let fileUrls = [];
+            for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
+              let file = files[fileIndex];
+              let filename = uniqueFilename("");
+
+              const storageRef = ref(storage, `posts/${user.id}/${filename}`);
+              await uploadBytes(storageRef, file).then(async (snapshot) => {
+                try {
+                  let url = await getDownloadURL(
+                    ref(storage, `posts/${user.id}/${filename}`)
+                  );                  
+                  fileUrls.push(url);
+                } catch (err) {
+                  console.error(err);
+                }
+              });
+            }
+
             await createRequest(
               title,
               content,
@@ -160,7 +177,8 @@ export default function CreateRequest(props) {
               document.getElementById("use-address") &&
                 document.getElementById("use-address").checked
                 ? accountAddress
-                : ""
+                : "",
+              fileUrls
             );
             window.location.href = "/";
           }

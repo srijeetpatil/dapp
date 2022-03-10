@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from "react";
+import { memo } from "react";
 import SendButton from "../components/Send";
 
 const styles = {
@@ -145,11 +145,7 @@ function Messages(props) {
                 style={styles.contact}
                 key={i}
                 onClick={() => {
-                  let id =
-                    user.chat[current]?.sender?.username === user.username
-                      ? user.chat[current]?.reciever?._id
-                      : user.chat[current]?.sender?._id;
-                  setCurrent(i);                  
+                  setCurrent(i);
                 }}
                 className="item"
               >
@@ -227,7 +223,7 @@ function Messages(props) {
                     user.chat[current].sender.username === user.username
                       ? user.chat[current].reciever._id
                       : user.chat[current].sender._id;
-                  sendMessage(id);                  
+                  sendMessage(id);
                 }}
               >
                 <SendButton />
@@ -241,42 +237,3 @@ function Messages(props) {
 }
 
 export default memo(Messages);
-
-const chats = [
-  {
-    name: "John Doe",
-    picture:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhVoqZVRdPWcuTCEHaphmign8QVLxGeyCXQ&usqp=CAU",
-    lastMessage: "Great, just workin rn",
-    chat: [
-      {
-        content: "Hi there, how are you",
-        incoming: true,
-      },
-      {
-        content: "Great, just workin rn",
-        incoming: false,
-      },
-    ],
-  },
-  {
-    name: "Nicholas Plum",
-    picture:
-      "https://www.socialsciencespace.com/wp-content/uploads/student-3500990_960_720_opt.jpg",
-    lastMessage: "Great, just workin rn",
-    chat: [
-      {
-        content: "Hey waiting for your reply as I have to go back soon!",
-        incoming: true,
-      },
-      {
-        content: "Wait, I am coming in a few!",
-        incoming: false,
-      },
-      {
-        content: "Come fast I'm waiting.",
-        incoming: true,
-      },
-    ],
-  },
-];

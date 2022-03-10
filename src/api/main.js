@@ -25,7 +25,7 @@ export async function getAllRequests() {
   return response;
 }
 
-export async function createRequest(title, content, type, eth_address) {
+export async function createRequest(title, content, type, eth_address, files) {
   let responseFromApi;
   try {
     let formData = new FormData();
@@ -33,6 +33,7 @@ export async function createRequest(title, content, type, eth_address) {
     formData.append("content", content);
     formData.append("type", type);
     formData.append("eth_address", eth_address);
+    formData.append("files", files);
     responseFromApi = await axios.post("/requests/create", formData);
   } catch (err) {
     console.error(err);
@@ -97,7 +98,7 @@ export async function addComment(content, postId) {
 export async function getAllComments(postId) {
   let responseFromApi;
   try {
-    responseFromApi = await axios.get("/comment/all/" + postId);    
+    responseFromApi = await axios.get("/comment/all/" + postId);
   } catch (err) {
     console.error(err);
   }

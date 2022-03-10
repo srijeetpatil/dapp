@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { Downvote, Upvote } from "./Votes";
-
 const styles = {
   image: {
     height: "3.5rem",
@@ -24,7 +21,7 @@ export default function Comment(props) {
   return (
     <div style={styles.col} className="mb-8">
       <div style={styles.row}>
-        <img style={styles.image} src={props.img}></img>
+        <img style={styles.image} src={props.img} alt="Profile"></img>
         <div style={{ ...styles.col, marginLeft: "1rem" }}>
           <label>
             <b>{props.username}</b>

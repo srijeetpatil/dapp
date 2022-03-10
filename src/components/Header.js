@@ -1,5 +1,4 @@
 import { useState } from "react";
-import LoginButton from "./LoginButton";
 import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
 
@@ -32,6 +31,8 @@ const styles = {
 export default function Header(props) {
   const [open, setOpen] = useState(false);
 
+  const { user } = props;
+
   return (
     <div className="flex flex-row sticky block top-0 justify-center items-center bg-white border-b border-gray-200 font text-sm z-10">
       <div className="font w-max px-4 py-4 mr-auto">SupportMyCause</div>
@@ -58,13 +59,13 @@ export default function Header(props) {
           Messages
         </Link>
       </div>
-      {props.user ? (
+      {user ? (
         <>
           <label
             className="w-max px-4 py-4 ml-auto cursor-pointer"
             onClick={() => setOpen(true)}
           >
-            {props.user.username}
+            {user.username}
           </label>
           <Dialog
             onClose={() => setOpen(false)}
@@ -72,7 +73,7 @@ export default function Header(props) {
             className="w-1/5 mx-auto"
           >
             <div className="shadow px-12 py-4 font flex flex-col items-center">
-              <label>Hi, {props.user.username}</label>
+              <label>Hi, {user.username}</label>
               <button
                 className="mt-4 text-white px-4 py-2 text-sm rounded"
                 style={{ backgroundColor: "#5032F6" }}
@@ -87,7 +88,7 @@ export default function Header(props) {
           </Dialog>
         </>
       ) : (
-        <Link to="/auth/signup" className="w-max ml-auto">
+        <Link to="/auth/signup" className="w-max ml-auto mr-2">
           <button
             className="text-white px-4 py-2 text-sm rounded"
             style={{ backgroundColor: "#5032F6" }}

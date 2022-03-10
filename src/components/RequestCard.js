@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Downvote, Upvote } from "./Votes";
 import { Dialog } from "@mui/material";
@@ -18,6 +18,7 @@ export default function RequestCard(props) {
     _id,
     user,
     eth_address,
+    files,
   } = props;
 
   const [vote, setVote] = useState(0);
@@ -25,6 +26,8 @@ export default function RequestCard(props) {
   const [chatDialogOpen, setChatDialogOpen] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Function to handle voting actions.
+  // Both frontend and backend.
   const addVote = async (voteValue) => {
     if (voteValue === 1) {
       if (vote === 1) {
@@ -59,25 +62,34 @@ export default function RequestCard(props) {
       else if (downvotes.indexOf(user.id) !== -1) setVote(-1);
 
       setTotalVotes(upvotes.length - downvotes.length);
+    } else {
+      setTotalVotes(upvotes.length - downvotes.length);
     }
-  }, [user]);
+  }, [user, upvotes, downvotes]);
 
   return (
     <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
-      <div className="flex flex-col col-span-2 items-center">
+      <div className="flex flex-col col-span-1 items-center">
         <img
           src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
           alt="Avatar"
           className="w-full object-contain rounded-full"
         />
-        <label className="text-sm mt-2">{username}</label>
+        <label className="text-xs mt-2">{username.substring(0, 7)}</label>
       </div>
-      <div className="col-span-10 ml-2">
+      <div className="col-span-11 ml-2">
         <label style={{ fontWeight: "600" }}>{title}</label>
+        {files.length > 0 && (
+          <img
+            src={files[0]}
+            alt="Loading"
+            className="w-full my-4 rounded-2xl"
+          ></img>
+        )}
         <div className="text-sm overflow-hidden">{content}</div>
         <div className="flex text-xs mt-2">
           <label className="px-2 py-1 border border-gray-200 mx-1 rounded-xl">
-            {type == 1 ? "Donation" : type == 2 ? "Fundraiser" : "Personal"}
+            {type === 1 ? "Donation" : type === 2 ? "Fundraiser" : "Personal"}
           </label>
           {status ? (
             <label className="px-2 py-1 bg-green-100 mx-1 rounded-xl">

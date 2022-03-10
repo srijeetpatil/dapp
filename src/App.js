@@ -64,15 +64,19 @@ function App() {
 
   // Socket io events and getAllrequests
   useEffect(() => {
-    socket.on("NEW_MESSAGE", (data) => {
-      setChat((oldArr) => [...oldArr, data]);
-    });
+    try {
+      socket.on("NEW_MESSAGE", (data) => {
+        setChat((oldArr) => [...oldArr, data]);
+      });
 
-    const getAllRequestsData = async () => {
-      let { data } = await getAllRequests();
-      setRequests([...data]);
-    };
-    getAllRequestsData();
+      const getAllRequestsData = async () => {
+        let { data } = await getAllRequests();
+        setRequests([...data]);
+      };
+      getAllRequestsData();
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
 
   const getRequest = async (shortId) => {
@@ -143,7 +147,7 @@ function App() {
     } catch (e) {
       console.error(e.message);
     }
-  };  
+  };
 
   return (
     <Router>
@@ -153,6 +157,7 @@ function App() {
             accounts={accounts}
             connectMetamask={connectMetamask}
             accountAddress={accountAddress}
+            user={user}
           />
         </Route>
         <Route path="/auth/signup">
@@ -160,14 +165,15 @@ function App() {
             accounts={accounts}
             connectMetamask={connectMetamask}
             accountAddress={accountAddress}
+            user={user}
           />
         </Route>
         <NavbarLayout user={user}>
           <Route path="/profile">
-            <Profile />
+            <Profile user={user} />
           </Route>
           <Route path="/request/create">
-            <CreateRequest accountAddress={accountAddress} />
+            <CreateRequest accountAddress={accountAddress} user={user} />
           </Route>
           <Route
             path="/request/id/:shortId"
@@ -198,7 +204,7 @@ function App() {
             />
           </Route>
           <Route path="/admin">
-            <Admin />
+            <Admin user={user} />
           </Route>
           <Route exact path="/">
             <Home

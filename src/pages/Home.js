@@ -76,7 +76,7 @@ const styles = {
 };
 
 export default function Home(props) {
-  const { user } = props;
+  const { user } = props;  
 
   return (
     <div className="container mx-auto">
@@ -92,6 +92,15 @@ export default function Home(props) {
                 ></img>
                 <label className="mt-4 text-xl">{user?.username}</label>
                 <label className="mt-4 text-sm">Karma: {user?.karma}</label>
+                {user?.verified ? (
+                  <label className="mt-2 text-sm px-2 py-1 bg-green-100 rounded-xl">
+                    Verified
+                  </label>
+                ) : (
+                  <label className="mt-2 text-sm px-2 py-1 bg-red-100 rounded-xl">
+                    Unverified
+                  </label>
+                )}
               </div>
               <div className="mt-4 text-xs border-b border-gray-200 w-full py-2 min-h-16">
                 Posts
@@ -130,10 +139,13 @@ export default function Home(props) {
               shortId={post.shortId}
               _id={post.created_by._id}
               eth_address={post.eth_address}
+              files={post.files}
               user={user}
             />
           ))}
-          <div className="text-center mt-8 text-gray-500">Oops reached the end!</div>
+          <div className="text-center py-32 text-gray-500">
+            Oops reached the end!
+          </div>
         </div>
         <div className="col-span-3">
           <div className="sticky block top-16">
