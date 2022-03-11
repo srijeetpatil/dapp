@@ -76,42 +76,48 @@ const styles = {
 };
 
 export default function Home(props) {
-  const { user } = props;  
+  const { user } = props;
 
   return (
     <div className="container mx-auto">
       <div className="grid grid-cols-12">
         <div className="col-span-3">
-          <div className="sticky block top-16">
-            <div className="shadow bg-white px-4 py-4 rounded-2xl">
-              <div className="flex flex-col items-center">
-                <img
-                  src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
-                  alt="Avatar"
-                  className="w-1/3 object-contain rounded-full"
-                ></img>
-                <label className="mt-4 text-xl">{user?.username}</label>
-                <label className="mt-4 text-sm">Karma: {user?.karma}</label>
-                {user?.verified ? (
-                  <label className="mt-2 text-sm px-2 py-1 bg-green-100 rounded-xl">
-                    Verified
-                  </label>
-                ) : (
-                  <label className="mt-2 text-sm px-2 py-1 bg-red-100 rounded-xl">
-                    Unverified
-                  </label>
-                )}
+          {user && (
+            <div className="sticky block top-16">
+              <div className="shadow bg-white px-4 py-4 rounded-2xl">
+                <div className="flex flex-col items-center">
+                  <img
+                    src={
+                      "https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"
+                    }
+                    alt="Avatar"
+                    className="w-1/3 object-contain rounded-full"
+                  ></img>
+                  <label className="mt-4 text-xl">{user?.username}</label>
+                  <label className="mt-4 text-sm">Karma: {user?.karma}</label>
+                  {user?.verified ? (
+                    <label className="mt-2 text-sm px-2 py-1 bg-green-100 rounded-xl">
+                      Verified
+                    </label>
+                  ) : (
+                    <label className="mt-2 text-sm px-2 py-1 bg-red-100 rounded-xl">
+                      Unverified
+                    </label>
+                  )}
+                </div>
+                <div className="mt-4 text-xs border-b border-gray-200 w-full py-2 min-h-16">
+                  Posts
+                </div>
+                <div className="text-xs my-2 text-gray-500">
+                  Nothing to show!
+                </div>
+                <div className="mt-4 text-xs border-b border-gray-200 w-full py-2">
+                  Comments
+                </div>
+                <div className="text-xs my-2 text-gray-500">
+                  Nothing to show!
+                </div>
               </div>
-              <div className="mt-4 text-xs border-b border-gray-200 w-full py-2 min-h-16">
-                Posts
-              </div>
-              <div className="text-xs my-2 text-gray-500">Nothing to show!</div>
-              <div className="mt-4 text-xs border-b border-gray-200 w-full py-2">
-                Comments
-              </div>
-              <div className="text-xs my-2 text-gray-500">Nothing to show!</div>
-            </div>
-            {props.user && (
               <Link to={"/request/create"}>
                 <button
                   style={styles.createRequestButton}
@@ -120,8 +126,8 @@ export default function Home(props) {
                   Create a request +
                 </button>
               </Link>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div className="col-span-6 mx-2 mt-2">
           {props.requests.map((post, i) => (
