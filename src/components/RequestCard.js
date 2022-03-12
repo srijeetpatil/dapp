@@ -19,6 +19,7 @@ export default function RequestCard(props) {
     user,
     eth_address,
     files,
+    picture
   } = props;
 
   const [vote, setVote] = useState(0);
@@ -71,9 +72,12 @@ export default function RequestCard(props) {
     <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
       <div className="flex flex-col col-span-1 items-center">
         <img
-          src={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
+          src={
+            picture ||
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
+          }
           alt="Avatar"
-          className="w-full object-contain rounded-full"
+          className="w-12 h-12 object-contain rounded-full object-cover"
         />
         <label className="text-xs mt-2">{username.substring(0, 7)}</label>
       </div>

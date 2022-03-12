@@ -191,6 +191,7 @@ function App() {
                 downvotes={activeRequest?.downvotes}
                 status={activeRequest?.verified}
                 id={activeRequest?._id}
+                shortId={activeRequest?.shortId}
               />
             )}
           />

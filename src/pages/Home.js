@@ -76,7 +76,7 @@ const styles = {
 };
 
 export default function Home(props) {
-  const { user } = props;
+  const { user, requests } = props;
 
   return (
     <div className="container mx-auto">
@@ -88,19 +88,20 @@ export default function Home(props) {
                 <div className="flex flex-col items-center">
                   <img
                     src={
-                      "https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"
+                      user?.picture ||
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
                     }
                     alt="Avatar"
-                    className="w-1/3 object-contain rounded-full"
+                    className="w-32 h-32 object-contain rounded-full object-cover"
                   ></img>
                   <label className="mt-4 text-xl">{user?.username}</label>
                   <label className="mt-4 text-sm">Karma: {user?.karma}</label>
                   {user?.verified ? (
-                    <label className="mt-2 text-sm px-2 py-1 bg-green-100 rounded-xl">
+                    <label className="mt-2 text-xs px-2 py-1 bg-green-100 rounded-xl">
                       Verified
                     </label>
                   ) : (
-                    <label className="mt-2 text-sm px-2 py-1 bg-red-100 rounded-xl">
+                    <label className="mt-2 text-xs px-2 py-1 bg-red-100 rounded-xl">
                       Unverified
                     </label>
                   )}
@@ -130,7 +131,7 @@ export default function Home(props) {
           )}
         </div>
         <div className="col-span-6 mx-2 mt-2">
-          {props.requests.map((post, i) => (
+          {requests.map((post, i) => (
             <RequestCard
               sendEtherToRequest={props.sendEtherToRequest}
               key={i}
@@ -146,6 +147,7 @@ export default function Home(props) {
               _id={post.created_by._id}
               eth_address={post.eth_address}
               files={post.files}
+              picture={post.created_by.picture}
               user={user}
             />
           ))}

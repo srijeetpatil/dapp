@@ -4,6 +4,7 @@ import SendButton from "../components/Send";
 import Comment from "../components/Comment";
 import { getAllComments, addComment } from "../api/main";
 import { upvotePost, downvotePost } from "../api/main";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const styles = {
   row: { display: "flex", flexDirection: "row" },
@@ -59,11 +60,13 @@ export default function Request(props) {
     downvotes,
     status,
     id,
+    shortId,
   } = props;
   const [vote, setVote] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const addVote = async (voteValue) => {
     if (voteValue === 1) {
@@ -94,80 +97,97 @@ export default function Request(props) {
   };
 
   useEffect(() => {
-    if (user && upvotes && downvotes) {
-      if (upvotes.indexOf(user.id) !== -1) setVote(1);
-      else if (downvotes.indexOf(user.id) !== -1) setVote(-1);
+    const main = async () => {
+      if (user && upvotes && downvotes) {
+        let comments = await getAllComments(id);
+        setComments(comments);
 
-      setTotalVotes(upvotes.length - downvotes.length);
-    }
+        if (upvotes.indexOf(user.id) !== -1) setVote(1);
+        else if (downvotes.indexOf(user.id) !== -1) setVote(-1);
+
+        setTotalVotes(upvotes.length - downvotes.length);
+      }
+    };
+    main();
   }, [id, downvotes, upvotes, user]);
 
   useEffect(() => {
     const main = async () => {
-      if (!id) getRequest(props.match.params.shortId);
-      else {
-        let comments = await getAllComments(id);
-        setComments(comments);
-      }
+      getRequest(props.match.params.shortId);
     };
     main();
-  }, [id, props.match.params.shortId]);
+    setLoading(false);
+  }, [props.match.params.shortId]);
 
   return (
     <div className="container mx-auto mt-8">
-      <label className="text-xs">6 min ago</label>
-      <h1 className="text-xl mb-2">{title}</h1>
-      <p>{content}</p>
-      <div className="flex my-2 text-sm">
-        {status ? (
-          <label className="px-2 py-1 bg-green-100 mx-1 rounded-xl">
-            Verified
-          </label>
-        ) : (
-          <label className="px-2 py-1 bg-red-100 mx-1 rounded-xl">
-            Unverified
-          </label>
-        )}
-        <label className="px-2 py-1 border border-gray-200 mx-1 rounded-xl">
-          {type === 1 ? "Donation" : type === 2 ? "Fundraiser" : "Personal"}
-        </label>
-        <div style={styles.votes}>
-          <Upvote
-            addVote={addVote}
-            fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
-          />
-          {totalVotes}
-          <Downvote addVote={addVote} fill={vote === -1 ? "#9696F2" : "#ccc"} />
+      {!loading ? (
+        <>
+          <label className="text-xs">6 min ago</label>
+          <h1 className="text-xl mb-2">{title}</h1>
+          <p>{content}</p>
+          <div className="flex my-2 text-sm">
+            {status ? (
+              <label className="px-2 py-1 bg-green-100 mx-1 rounded-xl">
+                Verified
+              </label>
+            ) : (
+              <label className="px-2 py-1 bg-red-100 mx-1 rounded-xl">
+                Unverified
+              </label>
+            )}
+            <label className="px-2 py-1 border border-gray-200 mx-1 rounded-xl">
+              {type === 1 ? "Donation" : type === 2 ? "Fundraiser" : "Personal"}
+            </label>
+            <div style={styles.votes}>
+              <Upvote
+                addVote={addVote}
+                fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
+              />
+              {totalVotes}
+              <Downvote
+                addVote={addVote}
+                fill={vote === -1 ? "#9696F2" : "#ccc"}
+              />
+            </div>
+          </div>
+          <div
+            style={styles.chatBox}
+            onChange={(e) => setComment(e.target.value)}
+          >
+            <input
+              type="text"
+              style={styles.chatInput}
+              placeholder="Write a comment"
+              className="font"
+              id="comment-textarea"
+            ></input>
+            <div style={styles.sendButton}>
+              <SendButton
+                addComment={addComment}
+                comment={comment}
+                id={id}
+                setComments={setComments}
+                comments={comments}
+              />
+            </div>
+          </div>
+          <div style={styles.comments}>
+            {comments.map((comment, i) => (
+              <Comment
+                key={i}
+                img={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
+                username={comment.author.username}
+                content={comment.content}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="flex">
+          <CircularProgress className="mx-auto mt-48" color="secondary" />
         </div>
-      </div>
-      <div style={styles.chatBox} onChange={(e) => setComment(e.target.value)}>
-        <input
-          type="text"
-          style={styles.chatInput}
-          placeholder="Write a comment"
-          className="font"
-          id="comment-textarea"
-        ></input>
-        <div style={styles.sendButton}>
-          <SendButton
-            addComment={addComment}
-            comment={comment}
-            id={id}
-            setComments={setComments}
-            comments={comments}
-          />
-        </div>
-      </div>
-      <div style={styles.comments}>
-        {comments.map((comment, i) => (
-          <Comment
-            key={i}
-            img={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
-            username={comment.author.username}
-            content={comment.content}
-          />
-        ))}
-      </div>{" "}
+      )}
     </div>
   );
 }

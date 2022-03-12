@@ -40,3 +40,29 @@ export const getMyProfile = () => {
     }
   });
 };
+
+export const addProfilePicture = async (url) => {
+  let responseFromApi;
+  try {
+    let formData = new FormData();
+    formData.append("url", url);
+    responseFromApi = await axios.post("/auth/add-profile-picture", formData);
+  } catch (err) {
+    console.error(err);
+  }
+
+  return responseFromApi;
+};
+
+export const addVerificationFile = async (url) => {
+  let responseFromApi;
+  try {
+    let formData = new FormData();
+    formData.append("url", url);
+    responseFromApi = await axios.post("/auth/add-verification-file", formData);
+  } catch (err) {
+    console.error(err);
+  }
+
+  return responseFromApi;
+};
