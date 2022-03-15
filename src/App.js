@@ -124,8 +124,6 @@ function App() {
         method: "eth_sendTransaction",
         params: [transactionParameters],
       });
-
-      console.log(txHash);
     } catch (e) {
       console.error(e.message);
     }
@@ -205,7 +203,7 @@ function App() {
             />
           </Route>
           <Route path="/admin">
-            <Admin user={user} />
+            <Admin user={user} requests={requests} />
           </Route>
           <Route exact path="/">
             <Home

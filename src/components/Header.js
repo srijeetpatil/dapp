@@ -58,6 +58,15 @@ export default function Header(props) {
         >
           Messages
         </Link>
+        {user?.type === "Admin" && (
+          <Link
+            style={window.location.pathname === "/admin" ? styles.active : {}}
+            className="w-max px-4 py-4"
+            to="/admin"
+          >
+            Admin
+          </Link>
+        )}
       </div>
       {user ? (
         <>

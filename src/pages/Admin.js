@@ -1,4 +1,6 @@
-export default function Admin() {
+export default function Admin(props) {
+  const { requests, user } = props;
+
   return (
     <div className="container mx-auto mt-8">
       <label className="text-3xl font-semibold">Admin</label>
@@ -22,15 +24,39 @@ export default function Admin() {
         <label className="col-span-2">Status</label>
         <label className="col-span-2">Type</label>
         <label className="col-span-2">Created At</label>
+        <label className="col-span-2">Action</label>
       </div>
 
-      {Array.apply(0, Array(10)).map((e, i) => (
+      {requests?.map((req, i) => (
         <div className="grid grid-cols-12 mt-2 px-4 py-2 text-sm" key={i}>
-          <label className="col-span-2 font-semibold">John Doe</label>
-          <label className="col-span-2">Hello world</label>
-          <label className="col-span-2">Unverified</label>
-          <label className="col-span-2 text-yellow-900">Donation</label>
-          <label className="col-span-2">Tue 26 Feb 2021</label>
+          <label className="col-span-2 font-semibold flex items-center">
+            <img
+              src={
+                req.created_by.picture ||
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
+              }
+              className="w-8 h-8 rounded-full mr-2"
+            ></img>
+            {req.created_by.username}
+          </label>
+          <label className="col-span-2">{req.title.substring(0, 50)}...</label>
+          {req.verified ? (
+            <label className="col-span-2 px-2 py-1 bg-green-100 rounded-xl w-max self-start">
+              Verified
+            </label>
+          ) : (
+            <label className="col-span-2 px-2 py-1 bg-red-100 rounded-xl w-max self-start">
+              Unverified
+            </label>
+          )}
+          <label className="col-span-2 text-yellow-900">
+            {parseInt(req.type) === 1
+              ? "Donation"
+              : parseInt(req.type) === 2
+              ? "Fundraiser"
+              : "Personal"}
+          </label>
+          <label className="col-span-2">{req.created_at}</label>
         </div>
       ))}
     </div>
