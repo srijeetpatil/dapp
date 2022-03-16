@@ -50,7 +50,7 @@ export default function Profile(props) {
             }}
           ></img>
           <div className="flex flex-col">
-            <label className="ml-4 text-2xl font-bold">Mark Smith</label>
+            <label className="ml-4 text-2xl font-bold">{user?.username}</label>
             <input
               id="profile-picture"
               type="file"
@@ -108,7 +108,8 @@ export default function Profile(props) {
         <div className="mt-24 flex text-gray-400">
           <label
             className={`mx-8 cursor-pointer ${
-              activeCategory === "Posts" && "text-black font-bold"
+              activeCategory === "Posts" &&
+              "text-indigo-500 font-bold border-b border-indigo-500"
             }`}
             onClick={() => setActiveCategory("Posts")}
           >
@@ -116,7 +117,8 @@ export default function Profile(props) {
           </label>
           <label
             className={`mx-8 cursor-pointer ${
-              activeCategory === "Comments" && "text-black font-bold"
+              activeCategory === "Comments" &&
+              "text-indigo-500 font-bold border-b border-indigo-500"
             }`}
             onClick={() => setActiveCategory("Comments")}
           >
@@ -124,7 +126,8 @@ export default function Profile(props) {
           </label>
           <label
             className={`mx-8 cursor-pointer ${
-              activeCategory === "Verification" && "text-black font-bold"
+              activeCategory === "Verification" &&
+              "text-indigo-500 font-bold border-b border-indigo-500"
             }`}
             onClick={() => setActiveCategory("Verification")}
           >
@@ -139,7 +142,7 @@ export default function Profile(props) {
             activeCategory === "Verification" &&
             !verificationFile && (
               <div className="flex flex-col items-center text-gray-400 text-sm">
-                <label>
+                <label className="mx-auto w-max">
                   Upload any of the following documents: PAN, Aadhar, Driving
                   Licence. (JPEG)
                 </label>
@@ -167,7 +170,7 @@ export default function Profile(props) {
           {activeCategory === "Verification" && verificationFileURL && (
             <div className="flex flex-col">
               <img
-                className="w-full rounded-lg"
+                className="w-1/2 mx-auto rounded-lg"
                 src={verificationFileURL || user?.verificationFile}
                 alt="Verification File"
               ></img>
@@ -216,9 +219,11 @@ export default function Profile(props) {
           )}
           {activeCategory === "Verification" && user?.verified && (
             <div className="flex flex-col">
-              <label className="my-4 text-xs">This was uploaded by you</label>
+              <label className="mx-auto w-max text-xs my-4">
+                This was uploaded by you
+              </label>
               <img
-                className="w-full rounded-lg"
+                className="w-1/2 mx-auto rounded-lg"
                 src={user?.verificationFile}
                 alt="Verification File"
               ></img>

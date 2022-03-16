@@ -203,7 +203,7 @@ function App() {
             />
           </Route>
           <Route path="/admin">
-            <Admin user={user} requests={requests} />
+            <Admin user={user} requests={requests} setRequests={setRequests} />
           </Route>
           <Route exact path="/">
             <Home

@@ -151,7 +151,8 @@ function Messages(props) {
               >
                 <img
                   src={
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhVoqZVRdPWcuTCEHaphmign8QVLxGeyCXQ&usqp=CAU"
+                    contact.picture ||
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
                   }
                   alt="Avatar"
                   style={styles.image}
