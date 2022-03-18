@@ -84,7 +84,7 @@ export default function Header(props) {
             <div className="shadow px-12 py-4 font flex flex-col items-center">
               <label>Hi, {user.username}</label>
               <button
-                className="mt-4 text-white px-4 py-2 text-sm rounded"
+                className="mt-4 text-white px-4 py-2 text-sm rounded-2xl"
                 style={{ backgroundColor: "#5032F6" }}
                 onClick={() => {
                   localStorage.removeItem("auth");
@@ -99,7 +99,7 @@ export default function Header(props) {
       ) : (
         <Link to="/auth/signup" className="w-max ml-auto mr-2">
           <button
-            className="text-white px-4 py-2 text-sm rounded"
+            className="text-white px-4 py-2 text-sm rounded-2xl"
             style={{ backgroundColor: "#5032F6" }}
           >
             Sign up

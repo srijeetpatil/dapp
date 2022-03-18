@@ -1,6 +1,8 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import RequestCard from "../components/RequestCard";
+import { TextareaAutosize } from "@mui/material";
+import Attach from "../components/AttachFiles";
 //import PropTypes from "prop-types";
 
 /* You can either create a css file,
@@ -76,7 +78,12 @@ const styles = {
 };
 
 export default function Home(props) {
-  const { user, requests } = props;
+  const { user, requests, accountAddress } = props;
+  const [files, setFiles] = useState({});
+
+  const handleAttachClick = () => {
+    document.getElementById("selectFiles-crowdfunding").click();
+  };
 
   return (
     <div className="container mx-auto">
@@ -92,19 +99,25 @@ export default function Home(props) {
                       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
                     }
                     alt="Avatar"
-                    className="w-32 h-32 object-contain rounded-full object-cover"
+                    className="w-24 h-24 object-contain rounded-full object-cover"
                   ></img>
                   <label className="mt-4 text-xl">{user?.username}</label>
-                  <label className="mt-4 text-sm">Karma: {user?.karma}</label>
-                  {user?.verified ? (
-                    <label className="mt-2 text-xs px-2 py-1 bg-green-100 rounded-xl">
-                      Verified
-                    </label>
-                  ) : (
-                    <label className="mt-2 text-xs px-2 py-1 bg-red-100 rounded-xl">
-                      Unverified
-                    </label>
-                  )}
+                  <div className="my-2 flex items-center border-t border-b py-2 border-gray-200 justify-around w-full">
+                    <div className="flex flex-col items-center">
+                      <label className="text-xl">{user?.karma}</label>
+                      <label className="text-xs text-gray-400">Karma</label>
+                    </div>
+                    <span className="border border-gray-200 h-4"></span>
+                    {user?.verified ? (
+                      <label className="mt-2 text-xs px-2 py-1 bg-green-100 rounded-xl">
+                        Verified
+                      </label>
+                    ) : (
+                      <label className="mt-2 text-xs px-2 py-1 bg-red-100 rounded-xl">
+                        Unverified
+                      </label>
+                    )}
+                  </div>
                 </div>
                 <div className="mt-4 text-xs border-b border-gray-200 w-full py-2 min-h-16">
                   Posts
@@ -118,6 +131,12 @@ export default function Home(props) {
                 <div className="text-xs my-2 text-gray-500">
                   Nothing to show!
                 </div>
+              </div>
+              <div className="shadow bg-white px-4 py-4 mt-4 flex flex-wrap rounded-2xl">
+                <div style={styles.chip}>#agrofunding</div>
+                <div style={styles.chip}>#education</div>
+                <div style={styles.chip}>#pmcares</div>
+                <div style={styles.chip}>#animalwelfare</div>
               </div>
               <Link to={"/request/create"}>
                 <button
@@ -157,11 +176,58 @@ export default function Home(props) {
         </div>
         <div className="col-span-3">
           <div className="sticky block top-16">
-            <div className="shadow bg-white px-4 py-4 flex flex-wrap rounded-2xl">
-              <div style={styles.chip}>#agrofunding</div>
-              <div style={styles.chip}>#education</div>
-              <div style={styles.chip}>#pmcares</div>
-              <div style={styles.chip}>#animalwelfare</div>
+            <div className="flex flex-col shadow bg-white rounded-2xl text-sm px-4 py-4">
+              <label className="mx-auto py-4">Start crowdfunding</label>
+              <input
+                type="text"
+                className="px-4 bg-transparent border-b border-gray-100 py-2 outline-none my-2"
+                placeholder="Title"
+              ></input>
+              <TextareaAutosize
+                aria-label="empty textarea"
+                placeholder="Write something about it"
+                className="bg-transparent outline-none px-4 py-2 border-b border-gray-100"
+              />
+              <input
+                id="selectFiles-crowdfunding"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => setFiles(e.target.files)}
+                style={{ display: "none" }}
+              ></input>
+              <div className="flex flex-wrap items-center mt-4 px-2">
+                <div className="flex items-center" onClick={handleAttachClick}>
+                  <Attach />
+                  <label className="cursor-pointer ml-2">Attach files</label>
+                </div>
+                {Object.keys(files).map((file, i) => {
+                  return (
+                    <div key={i} className="px-1 py-1 bg-green-100 ml-1 rounded">
+                      {files[`${file}`].name}
+                    </div>
+                  );
+                })}
+              </div>
+              {accountAddress ? (
+                <div className="flex mt-4 px-2 text-xs">
+                  <input type="checkbox" id="use-address-crowdfunding"></input>
+                  <span className="ml-2">
+                    Use{" "}
+                    <span className="font-semibold">
+                      {accountAddress.substring(0, 20)}...
+                    </span>{" "}
+                    as ethereum address for this request?
+                  </span>
+                </div>
+              ) : (
+                <div className="mt-4 text-sm text-gray-500">
+                  Cannot see your ethereum address? Activate ethereum wallet by
+                  adding Metamask to your browser. If done, sign in to your
+                  Metamask account and refresh this page.
+                </div>
+              )}
+              <button className="text-white bg-indigo-500 px-2 py-4 mt-4 rounded-2xl text-xs">Create request</button>
             </div>
           </div>
         </div>

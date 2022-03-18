@@ -127,7 +127,7 @@ export default function CreateRequest(props) {
             className="shadow bg-white mt-4"
           >
             <MenuItem value={1}>Donation</MenuItem>
-            <MenuItem value={2}>Fundraiser</MenuItem>
+            <MenuItem value={2}>Crowdfunding</MenuItem>
             <MenuItem value={3}>Personal</MenuItem>
           </Select>
         </FormControl>
@@ -147,9 +147,8 @@ export default function CreateRequest(props) {
           and refresh this page.
         </div>
       )}
-      <button
-        style={styles.submit}
-        className="font"
+      <button        
+        className="font bg-indigo-500 text-white w-max ml-auto px-4 py-4 shadow-2xl" 
         onClick={async () => {
           if (title && content && type) {
             let fileUrls = [];

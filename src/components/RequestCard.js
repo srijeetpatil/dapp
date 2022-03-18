@@ -93,7 +93,7 @@ export default function RequestCard(props) {
         <div className="text-sm overflow-hidden">{content}</div>
         <div className="flex text-xs mt-2">
           <label className="px-2 py-1 border border-gray-200 mx-1 rounded-xl">
-            {type === 1 ? "Donation" : type === 2 ? "Fundraiser" : "Personal"}
+            {type === 1 ? "Donation" : type === 2 ? "Crowdfunding" : "Personal"}
           </label>
           {status ? (
             <label className="px-2 py-1 bg-green-100 mx-1 rounded-xl">
