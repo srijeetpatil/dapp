@@ -19,8 +19,8 @@ const styles = {
 
 export default function Comment(props) {
   return (
-    <div style={styles.col} className="mb-8">
-      <div style={styles.row}>
+    <div className="mb-4 flex flex-col bg-gray-100 px-4 py-4 w-max rounded-2xl">
+      <div className="flex">
         <img style={styles.image} src={props.img} alt="Profile"></img>
         <div style={{ ...styles.col, marginLeft: "1rem" }}>
           <label>

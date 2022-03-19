@@ -136,9 +136,9 @@ function Messages(props) {
           type="text"
           placeholder="Search"
           style={styles.search}
-          className="font"
+          className="font px-4 py-4 bg-gray-100 rounded-3xl"
         ></input>
-        <div style={styles.card}>
+        <div style={styles.card} className="shadow">
           {user &&
             user?.chat?.map((contact, i) => (
               <div
@@ -174,19 +174,13 @@ function Messages(props) {
         </div>
       </div>
       <div style={{ width: "60%" }} className="h-screen">
-        <button
-          style={{ ...styles.button, marginLeft: "auto" }}
-          className="font"
-        >
+        <button className="font ml-auto px-4 py-4 bg-gray-100 rounded-3xl">
           Clear chat
         </button>
-        <button
-          style={{ ...styles.button, marginLeft: "1rem" }}
-          className="font"
-        >
+        <button className="font ml-2 px-4 py-4 bg-gray-100 rounded-3xl">
           More
         </button>
-        <div className="h-2/3 rounded-3xl flex flex-col px-4 py-4 bg-white mt-8">
+        <div className="h-2/3 shadow rounded-3xl flex flex-col px-4 py-4 bg-white mt-8">
           <div>
             {user && current !== -1 && (
               <>

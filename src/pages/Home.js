@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import RequestCard from "../components/RequestCard";
 import { TextareaAutosize } from "@mui/material";
 import Attach from "../components/AttachFiles";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../utils/firebase";
+import { createRequest } from "../api/main";
+var uniqueFilename = require("unique-filename");
 //import PropTypes from "prop-types";
 
-/* You can either create a css file,
- module.css file or JavaScript object for style like this*/
 const styles = {
   homeGrid: {
     display: "flex",
@@ -80,6 +82,8 @@ const styles = {
 export default function Home(props) {
   const { user, requests, accountAddress } = props;
   const [files, setFiles] = useState({});
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
 
   const handleAttachClick = () => {
     document.getElementById("selectFiles-crowdfunding").click();
@@ -91,7 +95,7 @@ export default function Home(props) {
         <div className="col-span-3">
           {user && (
             <div className="sticky block top-16">
-              <div className="shadow bg-white px-4 py-4 rounded-2xl">
+              <div className="border border-gray-200 bg-white px-4 py-4 rounded-2xl">
                 <div className="flex flex-col items-center">
                   <img
                     src={
@@ -102,7 +106,7 @@ export default function Home(props) {
                     className="w-24 h-24 object-contain rounded-full object-cover"
                   ></img>
                   <label className="mt-4 text-xl">{user?.username}</label>
-                  <div className="my-2 flex items-center border-t border-b py-2 border-gray-200 justify-around w-full">
+                  <div className="my-2 flex items-center py-2 border-gray-200 justify-around w-full">
                     <div className="flex flex-col items-center">
                       <label className="text-xl">{user?.karma}</label>
                       <label className="text-xs text-gray-400">Karma</label>
@@ -119,30 +123,23 @@ export default function Home(props) {
                     )}
                   </div>
                 </div>
-                <div className="mt-4 text-xs border-b border-gray-200 w-full py-2 min-h-16">
-                  Posts
-                </div>
+                <div className="mt-4 text-xl w-full py-2 min-h-16">Posts</div>
                 <div className="text-xs my-2 text-gray-500">
                   Nothing to show!
                 </div>
-                <div className="mt-4 text-xs border-b border-gray-200 w-full py-2">
-                  Comments
-                </div>
+                <div className="mt-4 text-xl w-full py-2">Comments</div>
                 <div className="text-xs my-2 text-gray-500">
                   Nothing to show!
                 </div>
               </div>
-              <div className="shadow bg-white px-4 py-4 mt-4 flex flex-wrap rounded-2xl">
+              <div className="border border-gray-200 bg-white px-4 py-4 mt-2 flex flex-wrap rounded-2xl">
                 <div style={styles.chip}>#agrofunding</div>
                 <div style={styles.chip}>#education</div>
                 <div style={styles.chip}>#pmcares</div>
                 <div style={styles.chip}>#animalwelfare</div>
               </div>
               <Link to={"/request/create"}>
-                <button
-                  style={styles.createRequestButton}
-                  className="font text-sm my-4"
-                >
+                <button className="font text-xs mt-2 bg-indigo-500 text-white px-4 py-4 rounded-2xl w-full">
                   Create a request +
                 </button>
               </Link>
@@ -176,17 +173,21 @@ export default function Home(props) {
         </div>
         <div className="col-span-3">
           <div className="sticky block top-16">
-            <div className="flex flex-col shadow bg-white rounded-2xl text-sm px-4 py-4">
+            <div className="flex flex-col border border-gray-200 bg-white rounded-2xl text-sm px-4 py-4">
               <label className="mx-auto py-4">Start crowdfunding</label>
               <input
                 type="text"
                 className="px-4 bg-transparent border-b border-gray-100 py-2 outline-none my-2"
                 placeholder="Title"
+                onChange={(e) => setTitle(e.target.value)}
               ></input>
               <TextareaAutosize
                 aria-label="empty textarea"
                 placeholder="Write something about it"
                 className="bg-transparent outline-none px-4 py-2 border-b border-gray-100"
+                onChange={(e) => {
+                  setContent(e.target.value);
+                }}
               />
               <input
                 id="selectFiles-crowdfunding"
@@ -203,7 +204,10 @@ export default function Home(props) {
                 </div>
                 {Object.keys(files).map((file, i) => {
                   return (
-                    <div key={i} className="px-1 py-1 bg-green-100 ml-1 rounded">
+                    <div
+                      key={i}
+                      className="px-1 py-1 bg-green-100 ml-1 rounded"
+                    >
                       {files[`${file}`].name}
                     </div>
                   );
@@ -227,7 +231,54 @@ export default function Home(props) {
                   Metamask account and refresh this page.
                 </div>
               )}
-              <button className="text-white bg-indigo-500 px-2 py-4 mt-4 rounded-2xl text-xs">Create request</button>
+              <button
+                className="text-white bg-indigo-500 px-2 py-4 mt-4 rounded-2xl text-xs"
+                onClick={async () => {
+                  if (title && content) {
+                    let fileUrls = [];
+                    for (
+                      let fileIndex = 0;
+                      fileIndex < files.length;
+                      fileIndex++
+                    ) {
+                      let file = files[fileIndex];
+                      let filename = uniqueFilename("");
+
+                      const storageRef = ref(
+                        storage,
+                        `posts/${user.id}/${filename}`
+                      );
+                      await uploadBytes(storageRef, file).then(
+                        async (snapshot) => {
+                          try {
+                            let url = await getDownloadURL(
+                              ref(storage, `posts/${user.id}/${filename}`)
+                            );
+                            fileUrls.push(url);
+                          } catch (err) {
+                            console.error(err);
+                          }
+                        }
+                      );
+                    }
+
+                    await createRequest(
+                      title,
+                      content,
+                      2,
+                      document.getElementById("use-address-crowdfunding") &&
+                        document.getElementById("use-address-crowdfunding")
+                          .checked
+                        ? accountAddress
+                        : "",
+                      fileUrls
+                    );
+                    window.location.href = "/";
+                  }
+                }}
+              >
+                Create crowdfunding request
+              </button>
             </div>
           </div>
         </div>

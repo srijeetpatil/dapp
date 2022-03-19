@@ -151,8 +151,8 @@ export default function Request(props) {
               />
             </div>
           </div>
-          <div
-            style={styles.chatBox}
+          <div            
+            className="flex mt-8 border border-gray-200 rounded-full w-2/3"
             onChange={(e) => setComment(e.target.value)}
           >
             <input
@@ -161,8 +161,9 @@ export default function Request(props) {
               placeholder="Write a comment"
               className="font"
               id="comment-textarea"
+              autoComplete="off"
             ></input>
-            <div style={styles.sendButton}>
+            <div style={styles.sendButton} className="my-1">
               <SendButton
                 addComment={addComment}
                 comment={comment}

@@ -69,7 +69,7 @@ export default function RequestCard(props) {
   }, [user, upvotes, downvotes]);
 
   return (
-    <div className="shadow px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
+    <div className="border border-gray-200 px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
       <div className="flex flex-col col-span-1 items-center">
         <img
           src={
