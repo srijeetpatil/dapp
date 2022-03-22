@@ -105,7 +105,7 @@ function App() {
   let web3 = new Web3(window.ethereum);
 
   /* Transfers ether to the requester's walled ID */
-  const sendEtherToRequest = async (to) => {
+  const sendEtherToRequest = async (to, amount) => {
     try {
       // Dev account main
       //0x227da402F13894d89F970804Fc791eb4c9b6f81D is my account ID, it would fail in other environments except mine.
@@ -114,7 +114,7 @@ function App() {
         gas: "21000",
         to: to,
         from: "0x227da402F13894d89F970804Fc791eb4c9b6f81D",
-        value: web3.utils.toWei("0.0001", "ether"),
+        value: web3.utils.toWei((amount / 100).toString(), "ether"),
         data: "0x7f7465737432000000000000000000000000000000000000000000000000000000600057",
         chainId: "3",
       };
@@ -190,6 +190,7 @@ function App() {
                 status={activeRequest?.verified}
                 id={activeRequest?._id}
                 shortId={activeRequest?.shortId}
+                files={activeRequest?.files}
               />
             )}
           />

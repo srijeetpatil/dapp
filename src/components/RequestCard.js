@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Downvote, Upvote } from "./Votes";
-import { Dialog } from "@mui/material";
+import { Dialog, Modal } from "@mui/material";
 import { initiateChat, upvotePost, downvotePost } from "../api/main";
+import SendEther from "./SendEther";
 
 export default function RequestCard(props) {
   const {
@@ -19,13 +20,15 @@ export default function RequestCard(props) {
     user,
     eth_address,
     files,
-    picture
+    picture,
+    accountAddress,
   } = props;
 
   const [vote, setVote] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
   const [chatDialogOpen, setChatDialogOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [sendEtherOpen, setSendEtherOpen] = useState(false);
 
   // Function to handle voting actions.
   // Both frontend and backend.
@@ -87,7 +90,7 @@ export default function RequestCard(props) {
           <img
             src={files[0]}
             alt="Loading"
-            className="w-full my-4 rounded-2xl"
+            className="w-full my-4 rounded"
           ></img>
         )}
         <div className="text-sm overflow-hidden">{content}</div>
@@ -107,14 +110,35 @@ export default function RequestCard(props) {
         </div>
         <div className="flex text-xs items-center my-2">
           {eth_address && (
-            <button
-              className="font px-2 py-2 bg-gray-300 rounded shadow mx-1"
-              onClick={() =>
-                sendEtherToRequest("0x4103FBa0974b7cb5C813d795035ae478E45b2D7b")
-              }
-            >
-              Donate ether
-            </button>
+            <>
+              <button
+                className="font px-2 py-2 bg-gray-300 rounded shadow mx-1"
+                onClick={() => {
+                  setSendEtherOpen(true);
+                  // sendEtherToRequest(
+                  //   "0x4103FBa0974b7cb5C813d795035ae478E45b2D7b"
+                  // );
+                }}
+              >
+                Donate ether
+              </button>
+              <Modal
+                onClose={() => setSendEtherOpen(false)}
+                open={sendEtherOpen}
+                className="w-1/4 mx-auto mt-64"
+                fullWidth
+                maxWidth="sm"
+              >
+                <SendEther
+                  accountAddress={accountAddress}
+                  username={username}
+                  picture={picture}
+                  sendEtherToRequest={sendEtherToRequest}
+                  eth_address={eth_address}
+                  setSendEtherOpen={setSendEtherOpen}
+                />
+              </Modal>
+            </>
           )}
           {user && user.username !== username && (
             <>

@@ -93,8 +93,8 @@ export default function Home(props) {
     <div className="container mx-auto">
       <div className="grid grid-cols-12">
         <div className="col-span-3">
-          {user && (
-            <div className="sticky block top-16">
+          <div className="sticky block top-16">
+            {user && (
               <div className="border border-gray-200 bg-white px-4 py-4 rounded-2xl">
                 <div className="flex flex-col items-center">
                   <img
@@ -132,19 +132,19 @@ export default function Home(props) {
                   Nothing to show!
                 </div>
               </div>
-              <div className="border border-gray-200 bg-white px-4 py-4 mt-2 flex flex-wrap rounded-2xl">
-                <div style={styles.chip}>#agrofunding</div>
-                <div style={styles.chip}>#education</div>
-                <div style={styles.chip}>#pmcares</div>
-                <div style={styles.chip}>#animalwelfare</div>
-              </div>
-              <Link to={"/request/create"}>
-                <button className="font text-xs mt-2 bg-indigo-500 text-white px-4 py-4 rounded-2xl w-full">
-                  Create a request +
-                </button>
-              </Link>
+            )}
+            <div className="border border-gray-200 bg-white px-4 py-4 mt-2 flex flex-wrap rounded-2xl">
+              <div style={styles.chip}>#agrofunding</div>
+              <div style={styles.chip}>#education</div>
+              <div style={styles.chip}>#pmcares</div>
+              <div style={styles.chip}>#animalwelfare</div>
             </div>
-          )}
+            <Link to={"/request/create"}>
+              <button className="font text-xs mt-2 bg-indigo-500 text-white px-4 py-4 rounded-2xl w-full">
+                Create a request +
+              </button>
+            </Link>
+          </div>
         </div>
         <div className="col-span-6 mx-2 mt-2">
           {requests.map((post, i) => (
@@ -165,6 +165,7 @@ export default function Home(props) {
               files={post.files}
               picture={post.created_by.picture}
               user={user}
+              accountAddress={accountAddress}
             />
           ))}
           <div className="text-center py-32 text-gray-500">

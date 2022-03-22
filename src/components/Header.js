@@ -44,20 +44,26 @@ export default function Header(props) {
         >
           Home
         </Link>
-        <Link
-          style={window.location.pathname === "/profile" ? styles.active : {}}
-          className="w-max px-4 py-4"
-          to="/profile"
-        >
-          Profile
-        </Link>
-        <Link
-          style={window.location.pathname === "/messages" ? styles.active : {}}
-          className="w-max px-4 py-4"
-          to="/messages"
-        >
-          Messages
-        </Link>
+        {user && (
+          <Link
+            style={window.location.pathname === "/profile" ? styles.active : {}}
+            className="w-max px-4 py-4"
+            to="/profile"
+          >
+            Profile
+          </Link>
+        )}
+        {user && (
+          <Link
+            style={
+              window.location.pathname === "/messages" ? styles.active : {}
+            }
+            className="w-max px-4 py-4"
+            to="/messages"
+          >
+            Messages
+          </Link>
+        )}
         {user?.type === "Admin" && (
           <Link
             style={window.location.pathname === "/admin" ? styles.active : {}}

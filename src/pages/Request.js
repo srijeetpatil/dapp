@@ -61,6 +61,7 @@ export default function Request(props) {
     status,
     id,
     shortId,
+    files,
   } = props;
   const [vote, setVote] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -98,12 +99,14 @@ export default function Request(props) {
 
   useEffect(() => {
     const main = async () => {
-      if (user && upvotes && downvotes) {
+      if (upvotes && downvotes) {
         let comments = await getAllComments(id);
         setComments(comments);
 
-        if (upvotes.indexOf(user.id) !== -1) setVote(1);
-        else if (downvotes.indexOf(user.id) !== -1) setVote(-1);
+        if (user) {
+          if (upvotes.indexOf(user.id) !== -1) setVote(1);
+          else if (downvotes.indexOf(user.id) !== -1) setVote(-1);
+        }
 
         setTotalVotes(upvotes.length - downvotes.length);
       }
@@ -122,7 +125,7 @@ export default function Request(props) {
   return (
     <div className="container mx-auto mt-8">
       {!loading ? (
-        <>
+        <div className="w-1/2 mx-auto">
           <label className="text-xs">6 min ago</label>
           <h1 className="text-xl mb-2">{title}</h1>
           <p>{content}</p>
@@ -151,8 +154,15 @@ export default function Request(props) {
               />
             </div>
           </div>
-          <div            
-            className="flex mt-8 border border-gray-200 rounded-full w-2/3"
+          {files?.length > 0 && (
+            <img
+              alt="File uploaded by user"
+              className="w-full mt-4 mx-auto rounded"
+              src={files[0]}
+            ></img>
+          )}
+          <div
+            className="flex mt-8 shadow-lg rounded-full"
             onChange={(e) => setComment(e.target.value)}
           >
             <input
@@ -173,7 +183,7 @@ export default function Request(props) {
               />
             </div>
           </div>
-          <div style={styles.comments}>
+          <div className="my-12">
             {comments.map((comment, i) => (
               <Comment
                 key={i}
@@ -183,7 +193,7 @@ export default function Request(props) {
               />
             ))}
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex">
           <CircularProgress className="mx-auto mt-48" color="secondary" />
