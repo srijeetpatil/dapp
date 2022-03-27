@@ -66,12 +66,11 @@ export async function downvotePost(shortId) {
 
 // All chat related APIs
 
-export async function initiateChat(reciever, message) {
+export async function initiateChat(reciever) {
   let responseFromApi;
   try {
     let formData = new FormData();
-    formData.append("reciever", reciever);
-    formData.append("message", message);
+    formData.append("reciever", reciever);    
     responseFromApi = await axios.post("/chat/initiate", formData);
   } catch (err) {
     console.error(err);

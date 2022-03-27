@@ -15,17 +15,7 @@ import NavbarLayout from "./layouts/NavbarLayout";
 import { getMyProfile } from "./api/auth";
 import { getAllRequests } from "./api/main";
 import { getRequestById } from "./api/main";
-import { io } from "socket.io-client";
-
-var os = require("os");
-
-var uri = "/";
-
-if (os.hostname().indexOf("local") > -1) {
-  uri = "http://localhost:3000/";
-}
-
-var socket = io(uri);
+import gun from "./utils/Gun";
 
 function App() {
   // Main
@@ -38,6 +28,7 @@ function App() {
 
   // Messages
   const [current, setCurrent] = useState(-1);
+  const [chatDatabaseName, setChatDatabaseName] = useState("");
   const [chat, setChat] = useState([]);
 
   useEffect(() => {
@@ -46,8 +37,6 @@ function App() {
         // Get user profile
         let object = await getMyProfile();
         setUser(object.data);
-        // Configure a session with the server
-        socket.emit("CONFIG", { uid: object.data.id });
       } catch (err) {
         console.error(err);
       }
@@ -65,10 +54,6 @@ function App() {
   // Socket io events and getAllrequests
   useEffect(() => {
     try {
-      socket.on("NEW_MESSAGE", (data) => {
-        setChat((oldArr) => [...oldArr, data]);
-      });
-
       const getAllRequestsData = async () => {
         let { data } = await getAllRequests();
         setRequests([...data]);
@@ -79,6 +64,17 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (chatDatabaseName) {
+      gun
+        .get(chatDatabaseName)
+        .map()
+        .once(function (text) {
+          setChat((oldArr) => [...oldArr, text]);
+        });
+    }
+  }, [chatDatabaseName]);
+
   const getRequest = async (shortId) => {
     let requestData = await getRequestById(shortId);
     setActiveRequest(requestData.data);
@@ -86,19 +82,17 @@ function App() {
 
   // Send a message over the socket io
   // and store it in orbitdb
-  const sendMessage = async (id) => {
+  const sendMessage = async (reciever) => {
     let message = document.getElementById("message-edit").value;
-    let sender = user.id;
-    let reciever = id;
-    if (message) {
-      document.getElementById("message-edit").value = "";
 
-      socket?.emit("MESSAGE", {
-        message: message,
-        reciever: reciever,
-        sender: sender,
-      });
-    }
+    gun.get(chatDatabaseName).set({
+      message: message,
+      sender: user.id,
+      reciever: reciever,
+      created_at: Date.now(),
+    });
+
+    document.getElementById("message-edit").value = "";
   };
 
   // Initialize the Web3 object
@@ -201,6 +195,8 @@ function App() {
               user={user}
               sendMessage={sendMessage}
               chat={chat}
+              setChatDatabaseName={setChatDatabaseName}
+              chatDatabaseName={chatDatabaseName}
             />
           </Route>
           <Route path="/admin">

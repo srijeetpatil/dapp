@@ -4,6 +4,7 @@ import { Downvote, Upvote } from "./Votes";
 import { Dialog, Modal } from "@mui/material";
 import { initiateChat, upvotePost, downvotePost } from "../api/main";
 import SendEther from "./SendEther";
+import gun from "../utils/Gun";
 
 export default function RequestCard(props) {
   const {
@@ -115,9 +116,6 @@ export default function RequestCard(props) {
                 className="font px-2 py-2 bg-gray-300 rounded shadow mx-1"
                 onClick={() => {
                   setSendEtherOpen(true);
-                  // sendEtherToRequest(
-                  //   "0x4103FBa0974b7cb5C813d795035ae478E45b2D7b"
-                  // );
                 }}
               >
                 Donate ether
@@ -171,7 +169,13 @@ export default function RequestCard(props) {
                       style={{ backgroundColor: "#5032F6" }}
                       onClick={() => {
                         if (message) {
-                          initiateChat(_id, message);
+                          initiateChat(_id);
+                          gun.get(user.id + _id).set({
+                            message: message,
+                            sender: user.id,
+                            reciever: _id,
+                            created_at: Date.now(),
+                          });
                           setChatDialogOpen(false);
                           window.location.href = "/messages";
                         }

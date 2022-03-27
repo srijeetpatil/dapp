@@ -89,7 +89,15 @@ const styles = {
 };
 
 function Messages(props) {
-  const { current, setCurrent, user, sendMessage, chat } = props;
+  const {
+    current,
+    setCurrent,
+    user,
+    sendMessage,
+    chat,
+    setChatDatabaseName,
+    chatDatabaseName,
+  } = props;
 
   // This method is explicitly described because, it does multiple things like
   // * Adding a profile picture on every first incoming message
@@ -103,9 +111,9 @@ function Messages(props) {
     }
 
     for (let message = 0; message < chat.length; message++) {
-      let messageBody = chat[message];
+      let messageBody = chat[message];      
 
-      if (messageBody.reciever === user.id) {
+      if (messageBody?.reciever === user.id) {
         messageArray.push(
           <div
             className="px-4 py-6 mb-2 w-max bg-gray-100 rounded-b-3xl rounded-tr-3xl"
@@ -120,7 +128,7 @@ function Messages(props) {
             className="px-4 py-6 mb-2 ml-auto w-max bg-indigo-900 text-white rounded-b-3xl rounded-tl-3xl"
             key={message}
           >
-            {messageBody.message}
+            {messageBody?.message}
           </div>
         );
       }
@@ -146,12 +154,19 @@ function Messages(props) {
                 key={i}
                 onClick={() => {
                   setCurrent(i);
+                  if (contact.sender._id === user.id) {
+                    setChatDatabaseName(user.id + contact.reciever._id);
+                  } else {
+                    setChatDatabaseName(contact.sender._id + user.id);
+                  }
                 }}
                 className="item"
               >
                 <img
                   src={
-                    contact.picture ||
+                    (contact.sender?._id === user.id
+                      ? contact.reciever.picture
+                      : contact.sender.picture) ||
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
                   }
                   alt="Avatar"
@@ -181,22 +196,7 @@ function Messages(props) {
           More
         </button>
         <div className="h-2/3 shadow rounded-3xl flex flex-col px-4 py-4 bg-white mt-8">
-          <div>
-            {user && current !== -1 && (
-              <>
-                {user?.chat[current]?.sender?.username === user.username ? (
-                  <div className="px-4 py-6 mb-2 ml-auto w-max bg-indigo-900 text-white rounded-b-3xl rounded-tl-3xl">
-                    {user?.chat[current]?.content}
-                  </div>
-                ) : (
-                  <div className="px-4 py-6 mb-2 w-max bg-gray-100 rounded-b-3xl rounded-tr-3xl">
-                    {user?.chat[current]?.content}
-                  </div>
-                )}
-              </>
-            )}
-            {chatFeature()}
-          </div>
+          {current !== -1 && <div>{chatFeature()}</div>}
           {current === -1 ? (
             <div className="flex justify-center items-center h-full">
               <span className="text-2xl">Start chatting with people</span>
@@ -209,7 +209,7 @@ function Messages(props) {
                 placeholder="Type a message"
                 className="font"
                 id="message-edit"
-                autocomplete="off"
+                autoComplete="off"
               ></input>
               <div
                 style={styles.sendButton}
