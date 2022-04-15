@@ -92,10 +92,10 @@ export default function Home(props) {
   return (
     <div className="container mx-auto">
       <div className="grid grid-cols-12">
-        <div className="col-span-3">
+        <div className="col-span-12 md:col-span-3">
           <div className="sticky block top-16">
             {user && (
-              <div className="border border-gray-200 bg-white px-4 py-4 rounded-2xl">
+              <div className="hidden md:block border border-gray-200 bg-white px-4 py-4 rounded-2xl">
                 <div className="flex flex-col items-center">
                   <img
                     src={
@@ -133,20 +133,20 @@ export default function Home(props) {
                 </div>
               </div>
             )}
-            <div className="border border-gray-200 bg-white px-4 py-4 mt-2 flex flex-wrap rounded-2xl">
+            <div className="border border-gray-200 bg-white px-4 py-4 mt-2 mx-2 md:mx-0 flex flex-wrap rounded-2xl">
               <div style={styles.chip}>#agrofunding</div>
               <div style={styles.chip}>#education</div>
               <div style={styles.chip}>#pmcares</div>
               <div style={styles.chip}>#animalwelfare</div>
             </div>
             <Link to={"/request/create"}>
-              <button className="font text-xs mt-2 bg-indigo-500 text-white px-4 py-4 rounded-2xl w-full">
+              <button className="font text-xs mt-2 bg-indigo-500 text-white px-4 py-4 mx-2 md:mx-0 rounded-2xl md:w-full">
                 Create a request +
               </button>
             </Link>
           </div>
         </div>
-        <div className="col-span-6 mx-2 mt-2">
+        <div className="col-span-12 md:col-span-6 mx-2 mt-2">
           {requests.map((post, i) => (
             <RequestCard
               sendEtherToRequest={props.sendEtherToRequest}
@@ -172,7 +172,7 @@ export default function Home(props) {
             Oops reached the end!
           </div>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-12 md:col-span-3">
           <div className="sticky block top-16">
             <div className="flex flex-col border border-gray-200 bg-white rounded-2xl text-sm px-4 py-4">
               <label className="mx-auto py-4">Start crowdfunding</label>

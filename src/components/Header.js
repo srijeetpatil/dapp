@@ -35,11 +35,13 @@ export default function Header(props) {
 
   return (
     <div className="flex flex-row sticky block top-0 justify-center items-center bg-white border-b border-gray-200 font text-sm z-10">
-      <div className="font w-max px-4 py-4 mr-auto">SupportMyCause</div>
-      <div className="flex">
+      <div className="hidden md:block font w-max px-4 py-4 mr-auto">
+        SupportMyCause
+      </div>
+      <div className="flex text-xs md:text-sm">
         <Link
           style={window.location.pathname === "/" ? styles.active : {}}
-          className="w-max px-4 py-4"
+          className="w-max px-2 md:px-4 py-2 md:py-4"
           to="/"
         >
           Home
@@ -47,7 +49,7 @@ export default function Header(props) {
         {user && (
           <Link
             style={window.location.pathname === "/profile" ? styles.active : {}}
-            className="w-max px-4 py-4"
+            className="w-max px-2 md:px-4 py-2 md:py-4"
             to="/profile"
           >
             Profile
@@ -58,7 +60,7 @@ export default function Header(props) {
             style={
               window.location.pathname === "/messages" ? styles.active : {}
             }
-            className="w-max px-4 py-4"
+            className="w-max px-2 md:px-4 py-2 md:py-4"
             to="/messages"
           >
             Messages
@@ -67,7 +69,7 @@ export default function Header(props) {
         {user?.type === "Admin" && (
           <Link
             style={window.location.pathname === "/admin" ? styles.active : {}}
-            className="w-max px-4 py-4"
+            className="w-max px-2 md:px-4 py-2 md:py-4"
             to="/admin"
           >
             Admin
@@ -77,7 +79,7 @@ export default function Header(props) {
       {user ? (
         <>
           <label
-            className="w-max px-4 py-4 ml-auto cursor-pointer"
+            className="w-max px-1 md:px-4 py-2 md:py-4 ml-auto text-xs md:text-sm cursor-pointer"
             onClick={() => setOpen(true)}
           >
             {user.username}
@@ -85,7 +87,7 @@ export default function Header(props) {
           <Dialog
             onClose={() => setOpen(false)}
             open={open}
-            className="w-1/5 mx-auto"
+            className="w-full md:w-1/5 mx-auto"
           >
             <div className="shadow px-12 py-4 font flex flex-col items-center">
               <label>Hi, {user.username}</label>

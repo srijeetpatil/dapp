@@ -116,7 +116,7 @@ function Messages(props) {
       if (messageBody?.reciever === user.id) {
         messageArray.push(
           <div
-            className="px-4 py-6 mb-2 w-max bg-gray-100 rounded-b-3xl rounded-tr-3xl"
+            className="px-4 py-6 mb-2 w-max bg-gray-100 rounded-b-3xl text-xs md:text-md rounded-tr-3xl"
             key={message}
           >
             {messageBody.message}
@@ -125,7 +125,7 @@ function Messages(props) {
       } else {
         messageArray.push(
           <div
-            className="px-4 py-6 mb-2 ml-auto w-max bg-indigo-900 text-white rounded-b-3xl rounded-tl-3xl"
+            className="px-4 py-6 mb-2 ml-auto w-max bg-indigo-900 text-white rounded-b-3xl rounded-tl-3xl text-xs md:text-md"
             key={message}
           >
             {messageBody?.message}
@@ -138,15 +138,15 @@ function Messages(props) {
   }
 
   return (
-    <div className="container flex mx-auto justify-between mt-8">
-      <div style={{ width: "30%" }}>
+    <div className="container grid grid-cols-12 mx-auto justify-between mt-8">
+      <div className="col-span-12 md:col-span-4">
         <input
           type="text"
           placeholder="Search"
           style={styles.search}
           className="font px-4 py-4 bg-gray-100 rounded-3xl"
         ></input>
-        <div style={styles.card} className="shadow">
+        <div style={styles.card} className="shadow-lg text-xs md:text-md">
           {user &&
             user?.chat?.map((contact, i) => (
               <div
@@ -169,8 +169,8 @@ function Messages(props) {
                       : contact.sender.picture) ||
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
                   }
-                  alt="Avatar"
-                  style={styles.image}
+                  alt="Avatar"                  
+                  className="w-12 h-12 object-contain rounded-full object-cover"
                 />
                 <div style={styles.contactDetails}>
                   <div style={{ width: "100%" }}>
@@ -188,14 +188,8 @@ function Messages(props) {
             ))}
         </div>
       </div>
-      <div style={{ width: "60%" }} className="h-screen">
-        <button className="font ml-auto px-4 py-4 bg-gray-100 rounded-3xl">
-          Clear chat
-        </button>
-        <button className="font ml-2 px-4 py-4 bg-gray-100 rounded-3xl">
-          More
-        </button>
-        <div className="h-2/3 shadow rounded-3xl flex flex-col px-4 py-4 bg-white mt-8">
+      <div className="h-screen col-span-12 md:col-span-8 ml-0 md:ml-4 mt-4 md:mt-0">        
+        <div className="h-2/3 shadow-lg rounded-3xl flex flex-col px-4 py-4 bg-white overflow-hidden">
           {current !== -1 && <div>{chatFeature()}</div>}
           {current === -1 ? (
             <div className="flex justify-center items-center h-full">

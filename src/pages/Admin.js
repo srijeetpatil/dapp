@@ -18,7 +18,7 @@ export default function Admin(props) {
   };
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container md:mx-auto mt-8 mx-2">
       <label className="text-3xl font-semibold">Admin</label>
       <div className="flex mt-8 text-sm items-center">
         <FormControl className="w-max mr-2 cursor-pointer" size="small">
@@ -36,19 +36,11 @@ export default function Admin(props) {
               <label className="text-sm font">Users</label>
             </MenuItem>
           </Select>
-        </FormControl>
-        <div className="border border-gray-200 rounded px-4 py-2 w-1/6 mx-2">
-          <label>Verified posts</label>
-          <label className="ml-2">120</label>
-        </div>
-        <div className="border border-gray-200 rounded px-4 py-2 w-1/6 mx-2">
-          <label>Unverified posts</label>
-          <label className="ml-2">12</label>
-        </div>
+        </FormControl>       
       </div>
       {type === 1 && (
         <>
-          <div className="grid grid-cols-12 mt-8 bg-gray-100 px-4 py-2">
+          <div className="hidden md:grid grid-cols-12 mt-8 bg-gray-100 px-4 py-2">
             <label className="col-span-2">Created By</label>
             <label className="col-span-2">Title</label>
             <label className="col-span-2">Status</label>
@@ -58,8 +50,8 @@ export default function Admin(props) {
           </div>
 
           {requests?.map((req, i) => (
-            <div className="grid grid-cols-12 mt-2 px-4 py-2 text-sm" key={i}>
-              <label className="col-span-2 font-semibold flex items-center">
+            <div className="flex flex-col md:grid md:grid-cols-12 mt-2 px-4 py-2 text-sm" key={i}>
+              <label className="col-span-2 my-1 font-semibold flex items-center">
                 <img
                   src={
                     req.created_by.picture ||
@@ -69,29 +61,29 @@ export default function Admin(props) {
                 ></img>
                 {req.created_by.username}
               </label>
-              <Link className="col-span-2" to={`/request/id/${req.shortId}`}>
+              <Link className="col-span-2 my-1" to={`/request/id/${req.shortId}`}>
                 {req.title.substring(0, 50)}...
               </Link>
               {req.verified ? (
-                <label className="col-span-2 px-2 py-1 bg-green-100 rounded-xl w-max self-start">
+                <label className="col-span-2 px-2 py-1 bg-green-100 rounded-xl w-max self-start my-1">
                   Verified
                 </label>
               ) : (
-                <label className="col-span-2 px-2 py-1 bg-red-100 rounded-xl w-max self-start">
+                <label className="col-span-2 px-2 py-1 bg-red-100 rounded-xl w-max self-start my-1">
                   Unverified
                 </label>
               )}
-              <label className="col-span-2 text-yellow-900">
+              <label className="col-span-2 text-yellow-900 my-1">
                 {parseInt(req.type) === 1
                   ? "Donation"
                   : parseInt(req.type) === 2
                   ? "Fundraiser"
                   : "Personal"}
               </label>
-              <label className="col-span-2">{req.created_at}</label>
+              <label className="col-span-2 my-1">{req.created_at}</label>
               {req.verified && (
                 <button
-                  className="col-span-2 px-2 py-2 rounded-xl bg-red-500 w-max text-xs text-white self-start shadow-lg"
+                  className="col-span-2 px-2 py-2 rounded-xl bg-red-500 w-max text-xs text-white self-start shadow-lg my-1"
                   onClick={async () => {
                     await verifyRequest(req.shortId, false);
                     let arrayOfRequests = requests;
@@ -104,7 +96,7 @@ export default function Admin(props) {
               )}
               {!req.verified && (
                 <button
-                  className="col-span-2 px-2 py-2 rounded-xl bg-green-500 w-max text-xs text-white self-start shadow-lg"
+                  className="col-span-2 px-2 py-2 rounded-xl bg-green-500 w-max text-xs text-white self-start shadow-lg my-1"
                   onClick={async () => {
                     await verifyRequest(req.shortId, true);
                     let arrayOfRequests = requests;

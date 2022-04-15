@@ -34,11 +34,11 @@ export default function Profile(props) {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="w-2/3 mx-auto my-12">
+    <div className="container md:mx-auto mx-2">
+      <div className="w-full md:w-2/3 mx-auto my-12">
         <div className="flex items-center">
           <img
-            className="w-48 h-48 rounded-full object-cover cursor-pointer"
+            className="w-16 h-16 md:w-48 md:h-48 rounded-full object-cover cursor-pointer"
             src={
               profilePictureURL ||
               user?.picture ||
@@ -105,9 +105,9 @@ export default function Profile(props) {
             )}
           </div>
         </div>
-        <div className="mt-24 flex text-gray-400">
+        <div className="mt-8 md:mt-24 flex text-gray-400 text-xs md:text-base">
           <label
-            className={`mx-8 cursor-pointer ${
+            className={`mx-4 md:mx-8 cursor-pointer ${
               activeCategory === "Posts" &&
               "text-indigo-500 font-bold border-b border-indigo-500"
             }`}
@@ -116,7 +116,7 @@ export default function Profile(props) {
             Posts
           </label>
           <label
-            className={`mx-8 cursor-pointer ${
+            className={`mx-4 md:mx-8 cursor-pointer ${
               activeCategory === "Comments" &&
               "text-indigo-500 font-bold border-b border-indigo-500"
             }`}
@@ -125,7 +125,7 @@ export default function Profile(props) {
             Comments
           </label>
           <label
-            className={`mx-8 cursor-pointer ${
+            className={`mx-4 md:mx-8 cursor-pointer ${
               activeCategory === "Verification" &&
               "text-indigo-500 font-bold border-b border-indigo-500"
             }`}
@@ -134,7 +134,7 @@ export default function Profile(props) {
             Verification
           </label>
         </div>
-        <div className="mt-8 w-full flex justify-center">
+        <div className="mt-8 w-full flex justify-center text-xs md:text-base">
           {(activeCategory === "Posts" || activeCategory === "Comments") && (
             <label className="text-gray-400 text-sm">Nothing to show</label>
           )}
@@ -170,7 +170,7 @@ export default function Profile(props) {
           {activeCategory === "Verification" && verificationFileURL && (
             <div className="flex flex-col">
               <img
-                className="w-1/2 mx-auto rounded-lg"
+                className="w-full md:w-1/2 mx-auto rounded-lg"
                 src={verificationFileURL || user?.verificationFile}
                 alt="Verification File"
               ></img>

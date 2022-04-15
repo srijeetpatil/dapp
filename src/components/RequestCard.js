@@ -5,6 +5,7 @@ import { Dialog, Modal } from "@mui/material";
 import { initiateChat, upvotePost, downvotePost } from "../api/main";
 import SendEther from "./SendEther";
 import gun from "../utils/Gun";
+import { useHistory } from "react-router-dom";
 
 export default function RequestCard(props) {
   const {
@@ -30,6 +31,7 @@ export default function RequestCard(props) {
   const [chatDialogOpen, setChatDialogOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [sendEtherOpen, setSendEtherOpen] = useState(false);
+  const history = useHistory();
 
   // Function to handle voting actions.
   // Both frontend and backend.
@@ -72,9 +74,26 @@ export default function RequestCard(props) {
     }
   }, [user, upvotes, downvotes]);
 
+  // This function checks if user has already interacted with
+  // the other user, if so, it navigates to messages directly 
+  const checkUserInChat = () => {
+    if (user) {
+      let chat = user.chat;
+
+      for (let chatIndex = 0; chatIndex < chat.length; chatIndex++) {
+        let { reciever, sender } = chat[chatIndex];
+
+        if (reciever._id === user.id || sender._id === user.id) {
+          history.push("/messages");
+          break;
+        }
+      }
+    }
+  };
+
   return (
-    <div className="border border-gray-200 px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
-      <div className="flex flex-col col-span-1 items-center">
+    <div className="border border-gray-200 px-2 md:px-4 py-4 grid grid-cols-12 bg-white rounded-2xl mb-2">
+      <div className="flex flex-col col-span-2 md:col-span-1 items-center">
         <img
           src={
             picture ||
@@ -85,7 +104,7 @@ export default function RequestCard(props) {
         />
         <label className="text-xs mt-2">{username.substring(0, 7)}</label>
       </div>
-      <div className="col-span-11 ml-2">
+      <div className="col-span-10 md:col-span-11 ml-2">
         <label style={{ fontWeight: "600" }}>{title}</label>
         {files.length > 0 && (
           <img
@@ -142,7 +161,9 @@ export default function RequestCard(props) {
             <>
               <button
                 className="font px-2 py-2 rounded shadow mx-1"
-                onClick={() => setChatDialogOpen(true)}
+                onClick={() => {
+                  checkUserInChat();
+                }}
               >
                 Chat
               </button>
