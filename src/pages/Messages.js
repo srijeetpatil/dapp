@@ -111,7 +111,7 @@ function Messages(props) {
     }
 
     for (let message = 0; message < chat.length; message++) {
-      let messageBody = chat[message];      
+      let messageBody = chat[message];
 
       if (messageBody?.reciever === user.id) {
         messageArray.push(
@@ -138,7 +138,7 @@ function Messages(props) {
   }
 
   return (
-    <div className="container grid grid-cols-12 mx-auto justify-between mt-8">
+    <div className="h-screen container grid grid-cols-12 mx-auto justify-between mt-8">
       <div className="col-span-12 md:col-span-4">
         <input
           type="text"
@@ -169,7 +169,7 @@ function Messages(props) {
                       : contact.sender.picture) ||
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
                   }
-                  alt="Avatar"                  
+                  alt="Avatar"
                   className="w-12 h-12 object-contain rounded-full object-cover"
                 />
                 <div style={styles.contactDetails}>
@@ -188,9 +188,11 @@ function Messages(props) {
             ))}
         </div>
       </div>
-      <div className="h-screen col-span-12 md:col-span-8 ml-0 md:ml-4 mt-4 md:mt-0">        
-        <div className="h-2/3 shadow-lg rounded-3xl flex flex-col px-4 py-4 bg-white overflow-hidden">
-          {current !== -1 && <div>{chatFeature()}</div>}
+      <div className="h-4/5 col-span-12 md:col-span-8 ml-0 md:ml-4 mt-4 md:mt-0">
+        <div className="h-full shadow-lg rounded-3xl flex flex-col px-4 py-4 bg-white overflow-hidden">
+          {current !== -1 && (
+            <div className="overflow-auto h-4/5">{chatFeature()}</div>
+          )}
           {current === -1 ? (
             <div className="flex justify-center items-center h-full">
               <span className="text-2xl">Start chatting with people</span>

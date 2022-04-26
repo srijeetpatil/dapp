@@ -187,9 +187,9 @@ export default function Request(props) {
             {comments.map((comment, i) => (
               <Comment
                 key={i}
-                img={"https://mdbootstrap.com/img/Photos/Avatars/img(20).jpg"}
                 username={comment.author.username}
                 content={comment.content}
+                picture={comment.author.picture}
               />
             ))}
           </div>

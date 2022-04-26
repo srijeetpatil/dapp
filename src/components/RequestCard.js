@@ -75,7 +75,7 @@ export default function RequestCard(props) {
   }, [user, upvotes, downvotes]);
 
   // This function checks if user has already interacted with
-  // the other user, if so, it navigates to messages directly 
+  // the other user, if so, it navigates to messages directly
   const checkUserInChat = () => {
     if (user) {
       let chat = user.chat;
@@ -83,11 +83,16 @@ export default function RequestCard(props) {
       for (let chatIndex = 0; chatIndex < chat.length; chatIndex++) {
         let { reciever, sender } = chat[chatIndex];
 
-        if (reciever._id === user.id || sender._id === user.id) {
+        if (
+          (reciever._id === user.id && sender._id === _id) ||
+          (reciever._id === _id && sender._id === user.id)
+        ) {
           history.push("/messages");
           break;
         }
       }
+
+      setChatDialogOpen(true);
     }
   };
 
@@ -225,11 +230,15 @@ export default function RequestCard(props) {
           <div className="ml-auto flex items-center select-none">
             <Upvote
               addVote={addVote}
+              user={user}
+              history={history}
               fill={vote === 1 ? "rgb(242,65,0)" : "#ccc"}
             />
             {totalVotes}
             <Downvote
               addVote={addVote}
+              user={user}
+              history={history}
               fill={vote === -1 ? "#9696F2" : "#ccc"}
             />
           </div>

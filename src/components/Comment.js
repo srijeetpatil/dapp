@@ -18,15 +18,23 @@ const styles = {
 };
 
 export default function Comment(props) {
+  const { picture, username, content } = props;
   return (
     <div className="mb-4 flex flex-col bg-gray-100 px-4 py-4 w-max rounded-2xl">
       <div className="flex">
-        <img style={styles.image} src={props.img} alt="Profile"></img>
+        <img
+          style={styles.image}
+          src={
+            picture ||
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjq82Piozdldq5e2mAKKCmqJsC93gYQtUtHw&usqp=CAU"
+          }
+          alt="Profile"
+        ></img>
         <div style={{ ...styles.col, marginLeft: "1rem" }}>
           <label>
-            <b>{props.username}</b>
+            <b>{username}</b>
           </label>
-          <p className="text-sm">{props.content}</p>
+          <p className="text-sm">{content}</p>
         </div>
       </div>
     </div>
